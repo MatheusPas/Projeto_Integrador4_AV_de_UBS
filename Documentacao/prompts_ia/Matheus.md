@@ -37,4 +37,4 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 - [x] Testado com o LLM simulado: pergunta encaminhada **não** chama o LLM; busca vazia devolve "a fonte não cobre".
 - [x] `python -m backend.app.rag` continua com os 186 casos passando.
 - [x] Testado com a chave do Groq: resposta geral (losartana) e personalizada (metformina esquecida) corretas e com fonte.
-- [ ] Sei explicar o pipeline e a API no vídeo.
+- [x] Sei explicar o pipeline e a API no vídeo.
