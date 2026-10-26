@@ -17,11 +17,10 @@ pergunta com sintoma, pedido de remédio ou mudança de tratamento é encaminhad
 python -m venv .venv
 .venv\Scripts\Activate.ps1          # Linux/Mac: source .venv/bin/activate
 pip install -r requirements.txt
-copy .env.example .env              # Linux/Mac: cp .env.example .env
 ```
 
-Crie uma chave gratuita em https://console.groq.com/keys e cole em `GROQ_API_KEY` no `.env`.
-**Nunca commite o `.env`.**
+O `.env` com a chave do Groq do grupo já vem no repositório. Para usar uma chave sua
+(gratuita em https://console.groq.com/keys), troque o `GROQ_API_KEY` no `.env`.
 
 ```bash
 uvicorn backend.app.main:app --reload
@@ -42,7 +41,7 @@ pergunta ─► triagem ─► busca (RAG) ─► LLM (Groq) ─► resposta + f
 |---|---|
 | `backend/app/main.py` | API: `POST /chat`, `POST /receita`, serve `frontend/`, limite de requisições por IP |
 | `backend/app/pipeline.py` | `responder(pergunta, receita)`: triagem → busca → LLM |
-| `backend/app/llm.py` | Chamada ao Groq (`llama-3.3-70b-versatile`); erro 429 vira mensagem amigável |
+| `backend/app/llm.py` | Chamada ao Groq (`openai/gpt-oss-120b`); erro 429 vira mensagem amigável |
 | `backend/app/triagem.py` | Classifica a pergunta: responder, encaminhar ou fora do escopo |
 | `backend/app/rag.py` | Busca TF-IDF nas bulas de `data/kb/` |
 | `backend/app/receita.py` | Lê a receita (imagem ou PDF) e devolve remédio + posologia |
