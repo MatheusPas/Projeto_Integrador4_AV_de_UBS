@@ -4,11 +4,6 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 
 ## Pedido inicial
 
-- **Prompt:** "Quero que realize a parte da atividade referente a Matheus no projeto, o que deve ser feito está nas instruções da equipe; as alterações devem ser commitadas em uma branch chamada secaoMatheus e depois dar merge na main; adicionar os prompts usados na pasta prompts_ia com o nome Matheus.md."
-- **Uso da IA:** leitura de `Documentacao/C2_Instrucoes_da_Equipe.md` e do `rag.py` do Lucas para seguir os contratos da equipe; divisão do trabalho em commits pequenos.
-
-## Esqueleto e configuração (`.gitignore`, `requirements.txt`, `.env.example`, `triagem.py`, `receita.py`, `prompts.py`)
-
 - **Prompt:** "Suba o esqueleto com as funções da seção Contratos devolvendo dados falsos (menos `rag.py`) e um `.gitignore` com `.env`, `.venv/` e `__pycache__/`."
 - **Uso da IA:** criação dos arquivos de configuração e das funções falsas com a mesma assinatura dos contratos.
 - **Minhas decisões:** marcar cada arquivo falso como "ESQUELETO" com o nome do responsável que vai substituí-lo; incluir `httpx` no `requirements.txt` para o João poder testar a API com o `TestClient`.
