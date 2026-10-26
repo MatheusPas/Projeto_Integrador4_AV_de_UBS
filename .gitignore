@@ -1,0 +1,8 @@
+# segredos: a chave do Groq fica só no .env de cada um
+.env
+
+# ambiente virtual e cache do Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/

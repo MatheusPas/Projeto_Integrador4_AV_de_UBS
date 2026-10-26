@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+groq
+scikit-learn
+pypdf
+python-multipart
+python-dotenv
+pytest
+# TestClient do FastAPI, para os testes da API
+httpx
