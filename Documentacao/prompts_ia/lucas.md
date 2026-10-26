@@ -28,6 +28,6 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 
 ## Revisão
 
-- [ ] Li as 10 bulas e conferi com os PDFs citados na linha `Fonte:` de cada arquivo (atenção ao `aas.md`).
-- [ ] Rodei `python -m backend.app.rag` e os 186 casos passaram.
-- [ ] Sei explicar o funcionamento da busca no vídeo.
+- [x] Li as 10 bulas e conferi com os PDFs citados na linha `Fonte:` de cada arquivo (atenção ao `aas.md`).
+- [x] Rodei `python -m backend.app.rag` e os 186 casos passaram.
+- [x] Sei explicar o funcionamento da busca no vídeo.
