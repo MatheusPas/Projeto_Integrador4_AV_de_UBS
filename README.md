@@ -17,10 +17,11 @@ pergunta com sintoma, pedido de remédio ou mudança de tratamento é encaminhad
 python -m venv .venv
 .venv\Scripts\Activate.ps1          # Linux/Mac: source .venv/bin/activate
 pip install -r requirements.txt
+copy .env.example .env              # Linux/Mac: cp .env.example .env
 ```
 
-O `.env` com a chave do Groq do grupo já vem no repositório. Para usar uma chave sua
-(gratuita em https://console.groq.com/keys), troque o `GROQ_API_KEY` no `.env`.
+Crie uma chave gratuita em https://console.groq.com/keys e cole em `GROQ_API_KEY` no `.env`.
+**Nunca commite o `.env`.**
 
 ```bash
 uvicorn backend.app.main:app --reload
