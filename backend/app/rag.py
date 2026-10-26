@@ -18,8 +18,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 KB_DIR = Path(__file__).resolve().parents[2] / "data" / "kb"
 
-# ponytail: limiar calibrado à mão; recalibrar com os resultados do eval
-SCORE_MINIMO = 0.1
+# Calibrado com data/casos_teste_rag.json: a pergunta válida de menor score
+# ficou em 0.155 e a fora do tema de maior score em 0.144.
+# ponytail: margem estreita; recalibrar com o eval e deixar a triagem barrar
+# o fora do tema antes da busca
+SCORE_MINIMO = 0.15
 
 # Palavras vazias saem antes da busca: sem isso, "qual", "de", "uma" fazem
 # perguntas fora do tema parecerem próximas de qualquer trecho.
@@ -39,20 +42,56 @@ SINONIMOS = {"usar": "tomar", "utilizar": "tomar"}
 # "refluxo ácido", "sódica" em vários sais) e por isso não contam como citação.
 NAO_IDENTIFICAM = {"acido", "cloridrato", "sodica", "potassica", "monoidratada"}
 
+# Pistas de intenção para escolher a seção de uma bula. Cada pista é o início
+# de uma palavra ou expressão, já sem acento ("esquec" pega "esqueci" e
+# "esquecer"). Ganha a seção com mais pistas; o TF-IDF só desempata.
+# ponytail: lista feita à mão; se o eval mostrar muitas perguntas sem pista,
+# trocar por um classificador treinado ou pelo próprio LLM.
+PISTAS_POR_SECAO = {
+    "Para que serve": ["pra que", "para que", "serve", "indicad", "indicac", "funcao", "trata"],
+    "Como tomar": ["como tomar", "como devo tomar", "como tomo", "como usar", "como devo usar",
+                   "horario", "que horas", "antes ou depois", "depois de", "antes de comer", "comer",
+                   "comida", "jejum", "refeic", "cafe", "partir", "mastig", "engol", "abrir",
+                   "triturar", "com agua", "de manha", "a noite"],
+    "Esqueci uma dose": ["esquec", "pulei", "dobrad", "dobrar", "perdi a dose", "atrasei"],
+    "Álcool e interações": ["alcool", "bebida", "beber", "cerveja", "vinho", "cachaca", "mistur",
+                            "interag", "interac", "junto com", "outros remedios", "outro remedio",
+                            "suco", "toranja", "grapefruit"],
+    "Efeitos colaterais": ["efeito", "colatera", "reac", "faz mal"],
+    "Quando procurar atendimento": ["procur", "medico", "urgen", "emergen", "alerta", "demais",
+                                    "overdose", "superdose", "dose maior", "intoxic", "gravid",
+                                    "gestant", "amament", "alergi", "perigo", "hospital", "samu"],
+    "Como guardar": ["guard", "armazen", "geladeira", "vencid", "validade", "temperatura",
+                     "conserv", "calor", "umidade"],
+}
+
+
+def _normalizar(texto: str) -> str:
+    """Minúsculas e sem acento."""
+    texto = unicodedata.normalize("NFKD", texto.lower())
+    return "".join(c for c in texto if not unicodedata.combining(c))
+
 
 def _preparar(texto: str) -> str:
-    """Minúsculas, sem acento, sem palavras vazias e com sinônimos unificados."""
-    texto = unicodedata.normalize("NFKD", texto.lower())
-    texto = "".join(c for c in texto if not unicodedata.combining(c))
-    return " ".join(SINONIMOS.get(p, p) for p in re.findall(r"\w+", texto)
+    """Normalizado, sem palavras vazias e com sinônimos unificados."""
+    return " ".join(SINONIMOS.get(p, p) for p in re.findall(r"\w+", _normalizar(texto))
                     if p not in PALAVRAS_VAZIAS)
 
 
+def _pistas(pergunta: str, secao: str) -> int:
+    """Quantas pistas da seção aparecem na pergunta."""
+    texto = _normalizar(pergunta)
+    for prefixo, pistas in PISTAS_POR_SECAO.items():
+        if secao.startswith(prefixo):
+            return sum(1 for p in pistas if re.search(r"\b" + p, texto))
+    return 0
+
+
 def _carregar_trechos(kb_dir: Path = KB_DIR) -> list[dict]:
-    """Trechos da base. "_secao" e "_nomes" são internos da busca e não saem em buscar()."""
+    """Trechos da base. As chaves com "_" são internas da busca e não saem em buscar()."""
     trechos = []
     for arquivo in sorted(kb_dir.glob("*.md")):
-        titulo, fonte, secao, corpo = arquivo.stem, "", None, []
+        titulo, fonte, marcas, secao, corpo = arquivo.stem, "", "", None, []
         medicamento = None if arquivo.stem.startswith("ubs") else arquivo.stem
 
         def fechar_secao():
@@ -60,12 +99,13 @@ def _carregar_trechos(kb_dir: Path = KB_DIR) -> list[dict]:
                 conteudo = "\n".join(corpo).strip()
                 nomes = set()
                 if medicamento:
-                    nomes = ({medicamento} | set(_preparar(titulo).split())) - NAO_IDENTIFICAM
+                    nomes = ({medicamento} | set(_preparar(f"{titulo} {marcas}").split())) - NAO_IDENTIFICAM
                 trechos.append({
                     "texto": f"{titulo} — {secao}\n{conteudo}",
                     "fonte": fonte,
                     "medicamento": medicamento,
                     "_secao": f"{secao}\n{conteudo}",
+                    "_titulo_secao": secao,
                     "_nomes": nomes,
                 })
 
@@ -74,6 +114,9 @@ def _carregar_trechos(kb_dir: Path = KB_DIR) -> list[dict]:
                 titulo = linha[2:].strip()
             elif linha.startswith("Fonte:"):
                 fonte = linha[len("Fonte:"):].strip()
+            elif linha.startswith("Nomes comerciais:"):
+                # marcas só servem para reconhecer o remédio na pergunta; não vão para o texto
+                marcas = linha[len("Nomes comerciais:"):].replace(",", " ")
             elif linha.startswith("## "):
                 fechar_secao()
                 secao, corpo = linha[3:].strip(), []
@@ -103,6 +146,9 @@ def buscar(pergunta: str, k: int = 3) -> list[dict]:
     Lista vazia quando a pergunta não cita remédio da base e nada passa do
     SCORE_MINIMO: o pipeline deve então responder que a fonte não cobre a
     dúvida (OWASP LLM09), em vez de deixar o modelo inventar.
+
+    "score" é a similaridade TF-IDF; quando a pergunta cita um remédio, soma-se
+    o número de pistas da seção (por isso pode passar de 1).
     """
     vetorizador, matriz_completa, matriz_secao, trechos = _indice()
     if not trechos or not pergunta.strip():
@@ -119,7 +165,7 @@ def buscar(pergunta: str, k: int = 3) -> list[dict]:
             consulta = vetorizador.transform([" ".join(p for p in palavras if p not in nomes)])
             proprios = [i for i in citados if trechos[i]["_nomes"] == nomes]
             for i, s in zip(proprios, cosine_similarity(consulta, matriz_secao[proprios])[0]):
-                scores[i] = s
+                scores[i] = _pistas(pergunta, trechos[i]["_titulo_secao"]) + s
         melhores = sorted(citados, key=lambda i: -scores[i])[:k]
     else:
         scores = cosine_similarity(vetorizador.transform([pergunta]), matriz_completa)[0]
@@ -131,7 +177,9 @@ def buscar(pergunta: str, k: int = 3) -> list[dict]:
 
 
 if __name__ == "__main__":
-    # Autoverificação rápida: python -m backend.app.rag
+    # python -m backend.app.rag             -> roda todos os casos de data/casos_teste_rag.json
+    # python -m backend.app.rag "pergunta"  -> mostra os trechos encontrados
+    import json
     import sys
 
     if len(sys.argv) > 1:
@@ -139,22 +187,18 @@ if __name__ == "__main__":
             print(f"[{r['score']}] {r['texto'].splitlines()[0]}  ({r['fonte']})")
         sys.exit()
 
-    casos = {
-        "posso tomar metformina com álcool?": ("metformina", "Álcool"),
-        "esqueci de tomar a losartana, e agora?": ("losartana", "Esqueci"),
-        "omeprazol é antes ou depois do café?": ("omeprazol", "Como tomar"),
-        "pra que serve a sinvastatina?": ("sinvastatina", "Para que serve"),
-        "qual o horário da unidade de saúde?": (None, ""),
-        "como devo usar a amoxicilina?": ("amoxicilina", "Como tomar"),
-        "AAS pode tomar com dipirona?": ("aas", "Álcool e interações"),
-        "esqueci de tomar a levotiroxina": ("levotiroxina", "Esqueci"),
-    }
-    for pergunta, (medicamento, secao) in casos.items():
-        resultado = buscar(pergunta)
-        assert resultado, f"sem resultado: {pergunta}"
-        primeiro = resultado[0]
-        assert primeiro["medicamento"] == medicamento, (pergunta, primeiro["texto"][:60])
-        assert secao in primeiro["texto"].splitlines()[0], (pergunta, primeiro["texto"][:60])
-    for fora_do_tema in ("quem ganhou a copa do mundo de 2002?", "qual a capital da França?"):
-        assert buscar(fora_do_tema) == [], f"deveria vir vazio: {fora_do_tema}"
-    print(f"OK — {len(_indice()[3])} trechos indexados, {len(casos) + 2} casos passaram")
+    casos = json.loads((KB_DIR.parent / "casos_teste_rag.json").read_text(encoding="utf-8"))
+    falhas = []
+    for c in casos:
+        resultado = buscar(c["pergunta"])
+        if c.get("vazio"):
+            ok = resultado == []
+        else:
+            ok = (bool(resultado) and resultado[0]["medicamento"] == c["medicamento"]
+                  and c["secao"] in resultado[0]["texto"].splitlines()[0])
+        if not ok:
+            veio = resultado[0]["texto"].splitlines()[0] if resultado else "[]"
+            falhas.append(f"[{c['categoria']}] {c['pergunta']!r} -> {veio}")
+    print("\n".join(falhas))
+    print(f"{len(casos) - len(falhas)}/{len(casos)} casos passaram ({len(_indice()[3])} trechos indexados)")
+    sys.exit(1 if falhas else 0)

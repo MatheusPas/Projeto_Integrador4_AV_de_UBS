@@ -60,7 +60,7 @@ A idade mínima para retirar medicamentos nas farmácias municipais é 12 anos.
 Para medicamentos controlados (psicotrópicos e sujeitos a controle especial), a idade mínima é 18 anos, conforme a legislação federal.
 
 ## Saber se o medicamento está disponível antes de ir
-A Prefeitura mantém o Painel de Medicamentos, no site vitoria.es.gov.br, que mostra em quais farmácias das Unidades Básicas de Saúde o medicamento está disponível e a situação de abastecimento da REMUME.
+A Prefeitura mantém o Painel de Medicamentos, no site vitoria.es.gov.br, que mostra em quais farmácias das Unidades Básicas de Saúde o medicamento está disponível (em estoque) e a situação de abastecimento da REMUME. Assim dá para consultar antes de sair de casa.
 
 ## Medicamentos de alto custo (Farmácia Cidadã Estadual)
 Medicamentos do Componente Especializado (alto custo) não são entregues nas UBS. Eles são fornecidos pela Farmácia Cidadã Estadual (SESA), na Avenida Cezar Hilal, nº 1418, Praia do Suá, Vitória, conforme os protocolos do Ministério da Saúde. A documentação necessária está no site da Farmácia Cidadã.
