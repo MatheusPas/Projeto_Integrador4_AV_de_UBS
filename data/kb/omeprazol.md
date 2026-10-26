@@ -1,5 +1,6 @@
 # Omeprazol
 Fonte: Bula do paciente — omeprazol cápsula dura de liberação retardada, genérico, Cristália Produtos Químicos Farmacêuticos Ltda., atualizada conforme Bula Padrão aprovada pela Anvisa em 12/05/2026 — https://cristalia.com.br/produto/143/bula-paciente (acesso em 26/10/2026)
+Nomes comerciais: Losec
 
 ## Para que serve
 O omeprazol diminui a quantidade de ácido produzida pelo estômago. Começa a agir em cerca de uma hora.

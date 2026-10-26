@@ -1,5 +1,6 @@
 # Hidroclorotiazida
 Fonte: Bula do paciente — hidroclorotiazida comprimido, genérico, Brainfarma Indústria Química e Farmacêutica S.A. (Neo Química), última alteração de bula registrada em 12/09/2016 — https://www.neoquimica.com.br/genericos/bula/hidroclorotiazida (acesso em 26/10/2026)
+Nomes comerciais: Clorana
 
 ## Para que serve
 A hidroclorotiazida é um diurético: faz o corpo eliminar mais líquido pela urina.

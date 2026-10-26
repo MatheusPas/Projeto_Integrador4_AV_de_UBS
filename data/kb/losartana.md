@@ -1,5 +1,6 @@
 # Losartana (losartana potássica)
 Fonte: Bula do paciente — losartana potássica comprimido revestido, genérico, Aché Laboratórios Farmacêuticos S.A., atualizada conforme Bula Padrão aprovada pela Anvisa em 10/04/2018 — https://www.ache.com.br/wp-content/uploads/application/pdf/bula-paciente-losartana-potassica.pdf (acesso em 26/10/2026)
+Nomes comerciais: Cozaar
 
 ## Para que serve
 A losartana é usada para tratar a pressão alta (hipertensão) e a insuficiência cardíaca (coração enfraquecido).

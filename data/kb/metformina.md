@@ -1,5 +1,6 @@
 # Metformina (cloridrato de metformina)
 Fonte: Bula do paciente — cloridrato de metformina comprimido, genérico, Vitamedic Indústria Farmacêutica Ltda., atualizada conforme Bula Padrão aprovada pela Anvisa em 27/08/2021 — https://vitamedic.ind.br/wp-content/uploads/2023/07/cloridrato-de-metformina_500mg_850mg_bula_Paciente-ok.pdf (acesso em 26/10/2026)
+Nomes comerciais: Glifage
 
 ## Para que serve
 A metformina é um remédio para diabetes, tomado por via oral. Ela ajuda a baixar o açúcar (glicose) no sangue para um nível o mais normal possível.

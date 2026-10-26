@@ -1,5 +1,6 @@
 # Levotiroxina (levotiroxina sódica)
 Fonte: Bula do paciente — Synthroid (levotiroxina sódica) comprimido, Abbott Laboratórios do Brasil Ltda., aprovada pela Anvisa em 18/07/2018 — https://dam.abbott.com/pt-br/documents/pdfs/nossas-bulas/s/BU%2011_Synthroid_paciente_FINAL.pdf (acesso em 26/10/2026)
+Nomes comerciais: Puran T4, Synthroid, Euthyrox, Levoid
 
 ## Para que serve
 A levotiroxina substitui o hormônio que a tireoide normalmente produz. É usada no hipotireoidismo, quando a tireoide não produz hormônio suficiente.

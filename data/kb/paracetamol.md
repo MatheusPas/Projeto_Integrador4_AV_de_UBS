@@ -1,5 +1,6 @@
 # Paracetamol
 Fonte: Bula do paciente — paracetamol comprimido revestido, genérico, Aché Laboratórios Farmacêuticos S.A., atualizada conforme Bula Padrão aprovada pela Anvisa em 12/03/2018 — https://www.ache.com.br/wp-content/uploads/application/pdf/bula-paciente-paracetamol-comprimidos.pdf (acesso em 26/10/2026)
+Nomes comerciais: Tylenol
 
 ## Para que serve
 O paracetamol é um remédio para baixar a febre e aliviar por um tempo dores leves a moderadas, como dor de cabeça, dor no corpo, dor de dente, dor nas costas, dores musculares, dores de resfriado e cólica menstrual.

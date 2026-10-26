@@ -1,5 +1,6 @@
 # Sinvastatina
 Fonte: Bula do paciente — sinvastatina genérico, Novartis Biociências S.A. / Sandoz do Brasil, atualizada conforme Bula Padrão aprovada pela Anvisa em 23/01/2025 — https://portal.novartis.com.br/medicamentos/wp-content/uploads/2022/11/Bula-SINVASTATINA-Comprimido-revestido-Paciente.pdf (acesso em 26/10/2026)
+Nomes comerciais: Zocor
 
 ## Para que serve
 A sinvastatina diminui o colesterol no sangue: reduz o "mau colesterol" (LDL) e os triglicérides e aumenta o "bom colesterol" (HDL).

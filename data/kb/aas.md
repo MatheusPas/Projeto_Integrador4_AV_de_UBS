@@ -1,5 +1,6 @@
 # AAS (ácido acetilsalicílico)
 Fonte: Bula do paciente — ácido acetilsalicílico comprimido revestido de liberação retardada, genérico, Eurofarma (versão VP_V03; histórico de alterações de bula até 16/06/2025) — https://eurofarma.com.br/produtos/bulas/patient/pt/bula-acido-acetilsalicilico.pdf (acesso em 26/10/2026)
+Nomes comerciais: Aspirina
 
 ## Para que serve
 O AAS em dose baixa diminui o agrupamento das plaquetas e, assim, ajuda a prevenir a formação de coágulos (trombos) nos vasos sanguíneos.

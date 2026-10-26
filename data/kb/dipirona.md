@@ -1,5 +1,6 @@
 # Dipirona (dipirona monoidratada)
 Fonte: Bula do paciente — dipirona monoidratada solução oral, genérico, Aché Laboratórios Farmacêuticos S.A., atualizada conforme Bula Padrão aprovada pela Anvisa em 07/07/2022 — https://www.ache.com.br/wp-content/uploads/application/pdf/bula-paciente-dipirona-monoidratada-solucao-oral.pdf (acesso em 26/10/2026)
+Nomes comerciais: Novalgina
 
 ## Para que serve
 A dipirona é um remédio para dor (analgésico) e para febre (antitérmico).

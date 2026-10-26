@@ -1,5 +1,6 @@
 # Amoxicilina
 Fonte: Bula do paciente — amoxicilina cápsula, genérico, Aché Laboratórios Farmacêuticos S.A., atualizada conforme Bula Padrão aprovada pela Anvisa em 25/07/2018 — https://www.ache.com.br/wp-content/uploads/application/pdf/bula-paciente-amoxicilina-500mg.pdf (acesso em 26/10/2026)
+Nomes comerciais: Amoxil
 
 ## Para que serve
 A amoxicilina é um antibiótico da família das penicilinas. Ela destrói as bactérias que causam infecções.
