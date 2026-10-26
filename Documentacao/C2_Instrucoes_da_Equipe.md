@@ -22,6 +22,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 **Seus arquivos:** `backend/app/main.py`, `llm.py`, `pipeline.py`, `requirements.txt`, `.env.example`, `.gitignore`, `README.md`
 
 - [ ] **Hoje:** subir o esqueleto com as funções da seção "Contratos" devolvendo dados falsos (menos `rag.py`, que já existe). Isso libera o resto do grupo.
+- [ ] **Hoje, junto com o esqueleto:** `.gitignore` com `.env`, `.venv/` e `__pycache__/`, antes que alguém suba a chave do Groq por engano.
 - [ ] `requirements.txt`: `fastapi uvicorn[standard] groq scikit-learn pypdf python-multipart python-dotenv pytest`
 - [ ] `llm.py`: chamada ao Groq (`llama-3.3-70b-versatile`), devolvendo texto + tokens; erro 429 vira mensagem amigável.
 - [ ] `pipeline.py`: triagem → busca → LLM. Se a triagem disser `encaminhar` ou `fora_escopo`, **não chama o LLM**. Se a busca vier vazia, responde "a fonte não cobre essa dúvida". Toda resposta leva o aviso "não substitui orientação médica ou farmacêutica".
@@ -33,7 +34,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 
 ## Lucas — Base de conhecimento e busca ✅
 
-**Entregue:** `backend/app/rag.py`, `data/kb/` (10 bulas + UBS de Vitória) e `data/casos_teste_rag.json` (186 casos de referência).
+**Entregue:** `backend/app/rag.py`, `data/kb/` (10 bulas + UBS de Vitória), `data/casos_teste_rag.json` (186 casos de referência) e `Documentacao/prompts_ia/lucas.md` (registro de uso de IA).
 **Para testar:** `python -m backend.app.rag` (roda os 186 casos) ou `python -m backend.app.rag "sua pergunta"`.
 
 ## João — Triagem, segurança e testes
@@ -130,7 +131,7 @@ No GitHub: **Compare & pull request** → base `main`. O Matheus revisa e faz o 
 
 - Commits pequenos e frequentes: eles contam na nota individual.
 - Use `git add <arquivo>`, nunca `git add .`.
-- Registre os prompts de IA que usou em `docs/prompts_ia/<seu-nome>.md` (exigência do edital).
+- Registre os prompts de IA que usou em `Documentacao/prompts_ia/<seu-nome>.md` (exigência do edital, seção 11). Modelo: `Documentacao/prompts_ia/lucas.md`.
 
 ## Cronograma
 
