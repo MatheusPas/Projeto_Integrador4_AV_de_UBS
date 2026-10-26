@@ -11,7 +11,8 @@ from groq import APIConnectionError, APIError, Groq, RateLimitError
 
 load_dotenv()
 
-MODELO = os.getenv("GROQ_MODELO", "llama-3.3-70b-versatile")
+# llama-3.3-70b-versatile saiu do Groq; gpt-oss-120b é o maior modelo de texto disponível
+MODELO = os.getenv("GROQ_MODELO", "openai/gpt-oss-120b")
 
 MSG_LIMITE = ("Muitas perguntas ao mesmo tempo no serviço de IA (limite do plano gratuito). "
               "Aguarde cerca de 1 minuto e tente de novo.")
@@ -35,7 +36,8 @@ def gerar(sistema: str, usuario: str) -> dict:
                       {"role": "user", "content": usuario}],
             # baixa: a resposta deve seguir a bula, não variar
             temperature=0.2,
-            max_tokens=600,
+            # o gpt-oss raciocina antes de responder e o raciocínio conta aqui
+            max_tokens=1500,
         )
     except RateLimitError:
         return {"texto": MSG_LIMITE, "tokens": 0, "erro": True}
