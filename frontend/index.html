@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- ESQUELETO (Matheus): tela mínima só para testar a API. O Eduardo substitui. -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistente de medicamentos — UBS Vitória</title>
+<style>
+  body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+  #conversa p { white-space: pre-wrap; }
+  .usuario { font-weight: bold; }
+  .encaminhar { background: #fff3cd; padding: .5rem; }
+  small { color: #555; }
+</style>
+</head>
+<body>
+<h1>Assistente de medicamentos</h1>
+<p><input type="file" id="arquivo" accept="image/*,application/pdf"> <span id="lidos"></span></p>
+<div id="conversa"></div>
+<form id="form"><input id="pergunta" size="50" required> <button>Enviar</button></form>
+<script>
+let receita = null;
+const conversa = document.getElementById("conversa");
+
+function mostrar(texto, classe) {
+  const p = document.createElement("p");
+  p.textContent = texto;
+  if (classe) p.className = classe;
+  conversa.append(p);
+  return p;
+}
+
+document.getElementById("arquivo").onchange = async (e) => {
+  const dados = new FormData();
+  dados.append("arquivo", e.target.files[0]);
+  const r = await fetch("/receita", { method: "POST", body: dados });
+  const json = await r.json();
+  if (!r.ok) return mostrar(json.detail);
+  receita = json;
+  document.getElementById("lidos").textContent =
+    "Remédios lidos: " + receita.medicamentos.map(m => `${m.nome} (${m.posologia})`).join(", ");
+};
+
+document.getElementById("form").onsubmit = async (e) => {
+  e.preventDefault();
+  const campo = document.getElementById("pergunta");
+  mostrar(campo.value, "usuario");
+  const r = await fetch("/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pergunta: campo.value, receita }),
+  });
+  campo.value = "";
+  const json = await r.json();
+  if (!r.ok) return mostrar(json.detail);
+  mostrar(json.resposta, json.categoria === "encaminhar" ? "encaminhar" : "");
+  if (json.fontes.length) mostrar("Fonte: " + json.fontes.join("; "));
+};
+</script>
+</body>
+</html>
