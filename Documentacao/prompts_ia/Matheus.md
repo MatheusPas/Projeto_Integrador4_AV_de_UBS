@@ -26,6 +26,12 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 - **Uso da IA:** implementação da API, do limite por IP em memória e de uma tela mínima para testar o chat.
 - **Minhas decisões:** limite configurável no `.env` (padrão 20 por minuto) para proteger a cota gratuita do Groq; receita só como imagem ou PDF até 10 MB, lida em memória e nunca salva; a tela é provisória e será substituída pela do Eduardo.
 
+## Chave do Groq e troca de modelo (`.env`, `.gitignore`, `llm.py`)
+
+- **Prompt:** "Adicione a API key [chave do Groq] ao projeto e deixe o .env dentro do repositório; os outros integrantes precisam utilizar. A cada alteração faça um commit e ao final faça merge com a main."
+- **Uso da IA:** tirar o `.env` do `.gitignore`, criar o `.env` com a chave e testar a chamada real ao Groq. O teste mostrou que o `llama-3.3-70b-versatile` não existe mais no Groq (erro 404); a IA listou os modelos disponíveis e trocou para o `openai/gpt-oss-120b`, aumentando o `max_tokens` para 1500 porque o raciocínio do modelo também conta no limite.
+- **Minhas decisões:** compartilhar uma chave única do grupo no repositório para facilitar o uso pela equipe, ciente do risco de o repositório ser público.
+
 ## README
 
 - **Prompt:** "README: como rodar e a regra 'nenhum dado real de paciente'."
@@ -36,5 +42,5 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 - [x] `uvicorn backend.app.main:app` sobe, a tela abre em `/` e `POST /chat` responde.
 - [x] Testado com o LLM simulado: pergunta encaminhada **não** chama o LLM; busca vazia devolve "a fonte não cobre".
 - [x] `python -m backend.app.rag` continua com os 186 casos passando.
-- [ ] Testar com a minha chave do Groq no `.env` (a resposta real do modelo ainda não foi conferida).
+- [x] Testado com a chave do Groq: resposta geral (losartana) e personalizada (metformina esquecida) corretas e com fonte.
 - [ ] Sei explicar o pipeline e a API no vídeo.
