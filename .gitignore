@@ -1,5 +1,5 @@
-# O .env com a chave do Groq do grupo fica no repositório, a pedido da
-# equipe, para todos usarem a mesma chave (trabalho acadêmico).
+# segredos: a chave do Groq fica só no .env de cada um
+.env
 
 # ambiente virtual e cache do Python
 .venv/
