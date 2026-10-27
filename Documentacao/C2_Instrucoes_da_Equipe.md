@@ -3,17 +3,16 @@
 **Entrega:** sexta, 30/10/2026: vídeo no YouTube + link do repositório no AVA.
 **O professor avalia:** IA funcionando (40%) · viabilidade técnica (30%) · testes/eval + vídeo (30%).
 
-> ### 🚨 A chave do Groq do grupo vazou (26/10)
-> O `.env` com a chave do grupo foi commitado por engano e, mesmo removido depois, **continua no histórico público do GitHub**. Quem abrir os commits antigos consegue copiar a chave.
-> - **Matheus:** apagar essa chave em https://console.groq.com/keys (é isso que a torna inútil).
-> - **Todos:** criar a **sua própria** chave grátis no mesmo link e colocar só no seu `.env`. Não existe mais chave do grupo.
+> ### 🔑 Chave do Groq: cada um usa a sua
+> Em 26/10 a chave do grupo foi commitada por engano e ficou no histórico público. **Ela já foi apagada no Groq e não funciona mais.**
+> - Crie a **sua própria** chave grátis em https://console.groq.com/keys e coloque só no seu `.env`.
 > - Nunca commitar o `.env` nem colar chave em código, documento ou mensagem.
 
 ## Quem faz o quê
 
 | Quem | Função | Branch | Status |
 |---|---|---|---|
-| Matheus | Backend, LLM e integração | `secaoMatheus` | ✅ entregue na `main` (falta apagar a chave vazada) |
+| Matheus | Backend, LLM e integração | `secaoMatheus` | ✅ entregue na `main` |
 | Lucas | Base de conhecimento e busca (RAG) | `secaoLucas` | ✅ entregue na `main` |
 | João | Triagem, segurança e testes | `secaoJoao` | a fazer |
 | Eduardo | Receita (imagem/PDF) e tela do chat | `secaoEduardo` | a fazer |
@@ -28,7 +27,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 **Entregue:** `backend/app/main.py`, `llm.py`, `pipeline.py`, `requirements.txt`, `.env.example`, `.gitignore`, `README.md` e os esqueletos de `triagem.py`, `prompts.py`, `receita.py` e `frontend/index.html` para o grupo integrar.
 **Mudança:** o Llama 3.3 saiu do Groq; o modelo agora é `openai/gpt-oss-120b`.
 
-- [ ] **Agora:** apagar a chave vazada em https://console.groq.com/keys.
+- [x] Apagar a chave do grupo que vazou no histórico.
 - [ ] Revisar e fazer merge dos PRs do grupo.
 
 ## Lucas — Base de conhecimento e busca ✅
