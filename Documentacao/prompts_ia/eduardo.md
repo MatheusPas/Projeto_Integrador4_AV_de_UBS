@@ -31,5 +31,4 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Antigravity (Google Dee
 - [x] Conferi as 5 receitas geradas em `data/receitas_ficticias/` (nenhum dado real, todas com "Paciente Fictício" e sem CPF, incluindo 1 PDF e 1 foto torta).
 - [x] Verifiquei que `receita.extrair(conteudo, mime)` retorna apenas `{"medicamentos": [{"nome", "posologia"}]}` e descarta o nome do paciente.
 - [x] Testei a tela do chat (`frontend/index.html`) com anexo de receita, exibição dos remédios lidos, perguntas seguintes usando a posologia, fonte, aviso legal e destaque de encaminhamento.
-- [x] Documentei o resultado esperado de cada receita em `data/receitas_ficticias/README.md` e `data/receitas_ficticias/esperado.json` para o João (`test_receita.py`).
-
+- [x] Documentei o resultado esperado de cada receita em `data/receitas_ficticias/README.md` e `data/receitas_ficticias/esperado.json` para o João (`test_receita.py`)
