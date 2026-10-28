@@ -49,6 +49,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
   - assunto fora de saúde → `fora_escopo`;
   - remédio que está na receita → `responder_personalizado`; senão → `responder_geral`.
 - [ ] `prompts.py`: prompt de sistema (só informar, usar só os trechos da busca, citar a fonte, nunca sugerir uso).
+  > **Visto no teste real (28/10):** o `gpt-oss-120b` às vezes coloca marcações como `【1†L1-L3】` depois da frase. O prompt deve pedir para não usar esse tipo de marcação e citar a fonte só por extenso (ou o Matheus limpa no `pipeline.py`). No vídeo isso fica feio.
 - [ ] Testes com `pytest`, sem chamar o Groq de verdade (simule `llm.gerar`):
   - `test_triagem.py`: pelo menos 25 casos, um grupo por regra;
   - `test_rag.py`: usar `data/casos_teste_rag.json` + checar o formato do retorno;
@@ -84,6 +85,8 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
   | Alucinação (resposta contradiz a bula) | ≤ 5% |
   | Tempo de resposta | segundos |
   | Custo (tokens por conversa) | dentro do plano gratuito |
+
+  > **Visto no teste real (28/10):** uma pergunta simples ("posso tomar metformina com álcool?") gastou cerca de **1.150 tokens** e levou ~4 s. Use como referência para o indicador de custo e para calcular a pausa entre as perguntas.
 
 - [ ] `eval/resultados_c2.md`: tabela + o que falhou e por quê.
 - [ ] `dados_primarios.md`: dados do DATASUS e lista de UBS da SEMUS, com fonte e data (pedido do professor na C1).
