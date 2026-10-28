@@ -1,0 +1,84 @@
+{
+  "receita_01_diabetes_hipertensao.png": {
+    "mime": "image/png",
+    "paciente_descartado": "Paciente Fictício",
+    "esperado": {
+      "medicamentos": [
+        {
+          "nome": "metformina",
+          "posologia": "500 mg, 1 comprimido após o almoço e 1 comprimido após o jantar"
+        },
+        {
+          "nome": "losartana",
+          "posologia": "50 mg, 1 comprimido pela manhã"
+        }
+      ]
+    }
+  },
+  "receita_02_infeccao.jpg": {
+    "mime": "image/jpeg",
+    "paciente_descartado": "Paciente Fictício",
+    "esperado": {
+      "medicamentos": [
+        {
+          "nome": "amoxicilina",
+          "posologia": "500 mg, 1 cápsula de 8 em 8 horas por 7 dias"
+        },
+        {
+          "nome": "paracetamol",
+          "posologia": "500 mg, 1 comprimido de 6 em 6 horas se dor ou febre"
+        }
+      ]
+    }
+  },
+  "receita_03_gastrite_colesterol_torta.jpg": {
+    "mime": "image/jpeg",
+    "observacao": "Foto inclinada (~8,5 graus) sobre fundo de mesa",
+    "paciente_descartado": "Paciente Fictício",
+    "esperado": {
+      "medicamentos": [
+        {
+          "nome": "omeprazol",
+          "posologia": "20 mg, 1 cápsula em jejum, 30 minutos antes do café da manhã"
+        },
+        {
+          "nome": "sinvastatina",
+          "posologia": "20 mg, 1 comprimido à noite"
+        }
+      ]
+    }
+  },
+  "receita_04_tireoide_pressao.png": {
+    "mime": "image/png",
+    "paciente_descartado": "Paciente Fictício",
+    "esperado": {
+      "medicamentos": [
+        {
+          "nome": "levotiroxina",
+          "posologia": "50 mcg, 1 comprimido em jejum, 30 minutos antes do café da manhã"
+        },
+        {
+          "nome": "hidroclorotiazida",
+          "posologia": "25 mg, 1 comprimido pela manhã"
+        }
+      ]
+    }
+  },
+  "receita_05_cardiovascular.pdf": {
+    "mime": "application/pdf",
+    "paciente_descartado": "Paciente Fictício",
+    "esperado": {
+      "medicamentos": [
+        {
+          "nome": "aas",
+          "posologia": "100 mg, 1 comprimido uma vez ao dia, 30 minutos antes do almoço"
+        },
+        {
+          "nome": "dipirona",
+          "posologia": "500 mg/mL, 20 gotas de 6 em 6 horas se dor ou febre"
+        }
+      ]
+    }
+  }
+}
+
