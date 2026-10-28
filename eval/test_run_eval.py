@@ -6,6 +6,12 @@ from eval import run_eval
 def test_contradiz_ignora_frase_negada():
     assert run_eval.contradiz("Não tome dose dobrada.", ["tome dose dobrada"]) == []
     assert run_eval.contradiz("Pode beber à vontade.", ["pode beber"]) == ["pode beber"]
+    assert run_eval.contradiz("Não parta nem mastigue o comprimido.", ["mastigue o comprimido"]) == []
+
+
+def test_falta_aceita_alternativas():
+    assert run_eval.falta("Pode reduzir a proteção do AAS.", ["diminu|reduz"]) == []
+    assert run_eval.falta("Avise o médico.", ["diminu|reduz"]) == ["diminu|reduz"]
 
 
 def test_eval_roda_com_llm_simulado(monkeypatch):
