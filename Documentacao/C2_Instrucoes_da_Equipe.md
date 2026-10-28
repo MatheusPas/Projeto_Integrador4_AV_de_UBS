@@ -140,11 +140,13 @@ No GitHub: **Compare & pull request** → base `main`. O Matheus revisa e faz o 
 
 | Dia | O quê |
 |---|---|
-| Seg 26/10 | Matheus sobe o esqueleto. Todos criam a chave do Groq e a branch. |
+| Seg 26/10 | Matheus sobe o esqueleto. Todos criam a chave do Groq e a branch. ✅ |
 | Ter 27/10 | Cada um faz a sua parte. |
-| Qua 28/10 | PRs até 18h; integração à noite; Gessiele roda o eval. |
-| Qui 29/10 | Correções; gravação do vídeo. |
-| Sex 30/10 | Upload no YouTube e envio no AVA. |
+| Qua 28/10 (noite) | João sobe a `triagem.py` (o eval e a demo de segurança dependem dela). |
+| **Qui 29/10, até 16h** | **Prazo final dos PRs:** João, Gessiele e correções do Eduardo. |
+| Qui 29/10 (noite) | Matheus junta tudo; Gessiele roda o eval; cada um grava a sua parte do vídeo. |
+| Sex 30/10 (manhã) | Edição e upload no YouTube. |
+| Sex 30/10 (tarde) | Envio no AVA (link do vídeo + repositório). |
 
 ## Vídeo (6–8 min, cada um apresenta a sua parte)
 
