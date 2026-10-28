@@ -25,7 +25,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 ## Matheus — Backend, LLM e integração ✅
 
 **Entregue:** `backend/app/main.py`, `llm.py`, `pipeline.py`, `requirements.txt`, `.env.example`, `.gitignore`, `README.md` e os esqueletos de `triagem.py`, `prompts.py`, `receita.py` e `frontend/index.html` para o grupo integrar.
-**Mudança:** o Llama 3.3 saiu do Groq; o modelo agora é `openai/gpt-oss-120b`.
+**Modelo de texto:** `openai/gpt-oss-120b` (o `llama-3.3-70b-versatile` também continua disponível no Groq, como alternativa).
 
 - [x] Apagar a chave do grupo que vazou no histórico.
 - [ ] Revisar e fazer merge dos PRs do grupo.
@@ -64,7 +64,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 `receita.py` e `frontend/index.html` já existem como esqueleto: troque o conteúdo, mantendo `extrair(conteudo, mime)`. No frontend, reaproveite os `fetch` (já reenviam a receita a cada mensagem).
 
 - [ ] 4–5 receitas **inventadas** (PNG/JPG + 1 PDF), com "Paciente Fictício" e sem CPF. Uma com foto torta.
-- [ ] `receita.py`: imagem → modelo de visão do Groq; PDF → texto com `pypdf`. Devolver só nome do remédio + posologia. **Não salvar o arquivo.** Antes de programar, confira em https://console.groq.com/docs/models qual modelo de visão está disponível (o Llama 3.3 já saiu do Groq; veja se o `meta-llama/llama-4-scout-17b-16e-instruct` continua).
+- [ ] `receita.py`: imagem → modelo de visão do Groq; PDF → texto com `pypdf`. Devolver só nome do remédio + posologia. **Não salvar o arquivo.** Modelo de visão: `qwen/qwen3.8-27b` (o `meta-llama/llama-4-scout-17b-16e-instruct` saiu do Groq; o Qwen está em "preview" e pode mudar, confira em https://console.groq.com/docs/vision).
 - [ ] `frontend/`: chat com botão de anexar receita, mostrar os remédios lidos, a fonte da resposta e o aviso legal, e destacar quando a resposta for encaminhamento.
 - [ ] Passar ao João o resultado esperado de cada receita (para `test_receita.py`).
 
@@ -140,11 +140,13 @@ No GitHub: **Compare & pull request** → base `main`. O Matheus revisa e faz o 
 
 | Dia | O quê |
 |---|---|
-| Seg 26/10 | Matheus sobe o esqueleto. Todos criam a chave do Groq e a branch. |
+| Seg 26/10 | Matheus sobe o esqueleto. Todos criam a chave do Groq e a branch. ✅ |
 | Ter 27/10 | Cada um faz a sua parte. |
-| Qua 28/10 | PRs até 18h; integração à noite; Gessiele roda o eval. |
-| Qui 29/10 | Correções; gravação do vídeo. |
-| Sex 30/10 | Upload no YouTube e envio no AVA. |
+| Qua 28/10 (noite) | João sobe a `triagem.py` (o eval e a demo de segurança dependem dela). |
+| **Qui 29/10, até 16h** | **Prazo final dos PRs:** João, Gessiele e correções do Eduardo. |
+| Qui 29/10 (noite) | Matheus junta tudo; Gessiele roda o eval; cada um grava a sua parte do vídeo. |
+| Sex 30/10 (manhã) | Edição e upload no YouTube. |
+| Sex 30/10 (tarde) | Envio no AVA (link do vídeo + repositório). |
 
 ## Vídeo (6–8 min, cada um apresenta a sua parte)
 
