@@ -1,60 +1,634 @@
 <!doctype html>
-<!-- ESQUELETO (Matheus): tela mínima só para testar a API. O Eduardo substitui. -->
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Assistente de medicamentos — UBS Vitória</title>
+<title>Assistente de Medicamentos — UBS Vitória</title>
 <style>
-  body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
-  #conversa p { white-space: pre-wrap; }
-  .usuario { font-weight: bold; }
-  .encaminhar { background: #fff3cd; padding: .5rem; }
-  small { color: #555; }
+  :root {
+    --azul-sus: #0b4f8a;
+    --azul-escuro: #073660;
+    --azul-claro: #e8f2fc;
+    --verde-ubs: #198754;
+    --verde-claro: #e9f7ef;
+    --alerta-bg: #fff3cd;
+    --alerta-borda: #dc3545;
+    --alerta-texto: #661018;
+    --cinza-bg: #f4f7fa;
+    --cinza-borda: #d8e1eb;
+    --texto: #1e293b;
+    --texto-suave: #475569;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--cinza-bg);
+    color: var(--texto);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--azul-sus), var(--azul-escuro));
+    color: #fff;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .header-inner {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .header-titulo h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  .header-titulo p {
+    margin: 0.25rem 0 0;
+    font-size: 0.88rem;
+    opacity: 0.9;
+  }
+
+  .badge-samu {
+    background: #dc3545;
+    color: #fff;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .aviso-topo {
+    background: #fff8e6;
+    border-bottom: 1px solid #f2d98d;
+    color: #5c4300;
+    font-size: 0.83rem;
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
+
+  main {
+    max-width: 820px;
+    width: 100%;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* Painel da receita */
+  .painel-receita {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .receita-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  #arquivo {
+    display: none;
+  }
+
+  .btn-anexar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--azul-claro);
+    color: var(--azul-sus);
+    border: 1px solid #b6d4fe;
+    border-radius: 8px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .btn-anexar:hover {
+    background: #d3e6fb;
+    border-color: var(--azul-sus);
+  }
+
+  .btn-limpar-receita {
+    background: transparent;
+    color: #b02a37;
+    border: 1px solid #f1aeb5;
+    border-radius: 8px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: none;
+  }
+
+  .btn-limpar-receita:hover {
+    background: #f8d7da;
+  }
+
+  .privacidade-nota {
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    margin-left: auto;
+  }
+
+  #lidos {
+    display: block;
+    margin-top: 0.55rem;
+    font-size: 0.88rem;
+    color: #0f5132;
+    font-weight: 600;
+  }
+
+  #lidos:empty {
+    display: none;
+  }
+
+  .chips-remedios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .chips-remedios:empty {
+    display: none;
+  }
+
+  .chip-remedio {
+    background: var(--verde-claro);
+    border: 1px solid #a3cfbb;
+    color: #0a3622;
+    border-radius: 8px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.84rem;
+  }
+
+  .chip-remedio strong {
+    text-transform: capitalize;
+  }
+
+  /* Sugestões rápidas */
+  .sugestoes {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .sugestao-btn {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    color: var(--texto-suave);
+    border-radius: 999px;
+    padding: 0.32rem 0.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .sugestao-btn:hover {
+    border-color: var(--azul-sus);
+    color: var(--azul-sus);
+    background: var(--azul-claro);
+  }
+
+  /* Área de conversa */
+  #conversa {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 12px;
+    padding: 1rem;
+    flex: 1;
+    min-height: 360px;
+    max-height: 55vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  #conversa p {
+    white-space: pre-wrap;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .mensagem {
+    max-width: 88%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 0.94rem;
+    position: relative;
+  }
+
+  .usuario {
+    align-self: flex-end;
+    background: var(--azul-sus);
+    color: #fff;
+    font-weight: 600;
+    border-bottom-right-radius: 3px;
+    padding: 0.65rem 0.95rem;
+    border-radius: 12px;
+    max-width: 82%;
+  }
+
+  .assistente {
+    align-self: flex-start;
+    background: #f8fafc;
+    border: 1px solid var(--cinza-borda);
+    color: var(--texto);
+    border-bottom-left-radius: 3px;
+  }
+
+  /* Destaque forte quando a resposta for encaminhamento */
+  .encaminhar {
+    align-self: flex-start;
+    background: var(--alerta-bg);
+    border: 2px solid var(--alerta-borda);
+    border-left: 6px solid var(--alerta-borda);
+    color: var(--alerta-texto);
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.12);
+  }
+
+  .badge-categoria {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-encaminhar {
+    background: #dc3545;
+    color: #fff;
+  }
+
+  .badge-personalizado {
+    background: #d1e7dd;
+    color: #0f5132;
+  }
+
+  .badge-geral {
+    background: var(--azul-claro);
+    color: var(--azul-sus);
+  }
+
+  .badge-fora {
+    background: #e2e8f0;
+    color: #475569;
+  }
+
+  .texto-resposta {
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .fonte-box {
+    margin-top: 0.65rem;
+    padding: 0.45rem 0.65rem;
+    background: #eef4fb;
+    border-left: 3px solid var(--azul-sus);
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #1e3a5f;
+    word-break: break-word;
+  }
+
+  .aviso-legal {
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.15);
+    font-size: 0.79rem;
+    color: #5c4300;
+    font-weight: 500;
+  }
+
+  .erro-msg {
+    align-self: center;
+    background: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+    padding: 0.55rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+  }
+
+  /* Formulário de envio */
+  #form {
+    display: flex;
+    gap: 0.6rem;
+    background: #fff;
+    padding: 0.6rem;
+    border-radius: 12px;
+    border: 1px solid var(--cinza-borda);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  #pergunta {
+    flex: 1;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 8px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  #pergunta:focus {
+    border-color: var(--azul-sus);
+    box-shadow: 0 0 0 3px rgba(11, 79, 138, 0.15);
+  }
+
+  #btn-enviar {
+    background: var(--azul-sus);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  #btn-enviar:hover:not(:disabled) {
+    background: var(--azul-escuro);
+  }
+
+  #btn-enviar:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    padding: 0.6rem 1rem 1rem;
+  }
 </style>
 </head>
 <body>
-<h1>Assistente de medicamentos</h1>
-<p><input type="file" id="arquivo" accept="image/*,application/pdf"> <span id="lidos"></span></p>
-<div id="conversa"></div>
-<form id="form"><input id="pergunta" size="50" required> <button>Enviar</button></form>
+
+<header>
+  <div class="header-inner">
+    <div class="header-titulo">
+      <h1>💊 Assistente de Medicamentos — UBS Vitória</h1>
+      <p>Informações baseadas nas bulas oficiais da Anvisa e dados das Unidades Básicas de Saúde de Vitória-ES</p>
+    </div>
+    <span class="badge-samu" title="Em caso de emergência médica, ligue 192">🚑 Emergência: SAMU 192</span>
+  </div>
+</header>
+
+<div class="aviso-topo" role="note">
+  ⚠️ <strong>Aviso legal:</strong> Este assistente é apenas informativo e não substitui orientação médica ou farmacêutica. Nunca envie dados reais de pacientes.
+</div>
+
+<main>
+  <section class="painel-receita" aria-label="Anexar receita médica">
+    <div class="receita-controles">
+      <label for="arquivo" class="btn-anexar" id="label-arquivo">
+        📎 Anexar receita (PNG, JPG ou PDF)
+      </label>
+      <input type="file" id="arquivo" accept="image/png,image/jpeg,image/webp,application/pdf">
+      <button type="button" class="btn-limpar-receita" id="btn-limpar">✕ Remover receita</button>
+      <span class="privacidade-nota">🔒 Lida apenas em memória (nenhum arquivo é salvo)</span>
+    </div>
+    <span id="lidos" aria-live="polite"></span>
+    <div class="chips-remedios" id="lista-remedios"></div>
+  </section>
+
+  <div class="sugestoes" aria-label="Exemplos de perguntas">
+    <button type="button" class="sugestao-btn" data-pergunta="Como devo tomar os remédios da minha receita?">📋 Como tomar minha receita?</button>
+    <button type="button" class="sugestao-btn" data-pergunta="Esqueci de tomar meu remédio, o que eu faço?">⏰ Esqueci uma dose</button>
+    <button type="button" class="sugestao-btn" data-pergunta="Para que serve a losartana?">💊 Para que serve a losartana?</button>
+    <button type="button" class="sugestao-btn" data-pergunta="Quais UBS de Vitória têm horário ampliado?">🏥 UBS horário ampliado</button>
+    <button type="button" class="sugestao-btn" data-pergunta="Estou com dor de cabeça e febre, qual remédio devo tomar?">⚠️ Sintoma (teste de encaminhamento)</button>
+  </div>
+
+  <div id="conversa" role="log" aria-live="polite">
+    <div class="mensagem assistente">
+      <span class="badge-categoria badge-geral">Boas-vindas</span>
+      <p class="texto-resposta">Olá! Sou o assistente informativo de medicamentos das UBS de Vitória-ES.
+Você pode digitar sua dúvida abaixo ou clicar em <strong>"📎 Anexar receita"</strong> para que eu leia os medicamentos e a posologia da sua receita fictícia.</p>
+      <div class="aviso-legal">⚠️ Esta resposta é apenas informativa e não substitui orientação médica ou farmacêutica.</div>
+    </div>
+  </div>
+
+  <form id="form">
+    <input id="pergunta" size="50" placeholder="Digite sua dúvida sobre medicamentos ou UBS de Vitória..." autocomplete="off" required>
+    <button type="submit" id="btn-enviar">Enviar</button>
+  </form>
+</main>
+
+<footer>
+  Projeto Integrador IV — Assistente de Medicamentos da Atenção Básica (Vitória-ES) · Uso exclusivo com receitas fictícias
+</footer>
+
 <script>
 let receita = null;
 const conversa = document.getElementById("conversa");
+const inputArquivo = document.getElementById("arquivo");
+const spanLidos = document.getElementById("lidos");
+const listaRemedios = document.getElementById("lista-remedios");
+const btnLimpar = document.getElementById("btn-limpar");
+const labelArquivo = document.getElementById("label-arquivo");
+const form = document.getElementById("form");
+const campoPergunta = document.getElementById("pergunta");
+const btnEnviar = document.getElementById("btn-enviar");
+
+const AVISO_PADRAO = "⚠️ Esta resposta é apenas informativa e não substitui orientação médica ou farmacêutica.";
 
 function mostrar(texto, classe) {
   const p = document.createElement("p");
   p.textContent = texto;
   if (classe) p.className = classe;
   conversa.append(p);
+  conversa.scrollTop = conversa.scrollHeight;
   return p;
 }
 
-document.getElementById("arquivo").onchange = async (e) => {
-  const dados = new FormData();
-  dados.append("arquivo", e.target.files[0]);
-  const r = await fetch("/receita", { method: "POST", body: dados });
-  const json = await r.json();
-  if (!r.ok) return mostrar(json.detail);
-  receita = json;
-  document.getElementById("lidos").textContent =
-    "Remédios lidos: " + receita.medicamentos.map(m => `${m.nome} (${m.posologia})`).join(", ");
+function mostrarRespostaAssistente(json) {
+  const EhEncaminhar = json.categoria === "encaminhar";
+  const EhPersonalizado = json.categoria === "responder_personalizado";
+  const EhFora = json.categoria === "fora_escopo";
+
+  const bloco = document.createElement("div");
+  bloco.className = EhEncaminhar ? "mensagem encaminhar" : "mensagem assistente";
+
+  // Badge indicando a categoria da resposta (destaca encaminhamento e uso da receita)
+  const badge = document.createElement("span");
+  if (EhEncaminhar) {
+    badge.className = "badge-categoria badge-encaminhar";
+    badge.textContent = "🚨 Encaminhamento obrigatório — Procure a UBS ou ligue SAMU 192";
+  } else if (EhPersonalizado) {
+    badge.className = "badge-categoria badge-personalizado";
+    badge.textContent = "📋 Resposta personalizada com a posologia da sua receita";
+  } else if (EhFora) {
+    badge.className = "badge-categoria badge-fora";
+    badge.textContent = "ℹ️ Fora do escopo";
+  } else {
+    badge.className = "badge-categoria badge-geral";
+    badge.textContent = "💊 Informação da bula / UBS";
+  }
+  bloco.append(badge);
+
+  // Separa o aviso legal do corpo da resposta para exibi-lo destacado
+  let corpo = (json.resposta || "").trim();
+  let avisoTexto = AVISO_PADRAO;
+  const indiceAviso = corpo.indexOf("⚠️ Esta resposta é apenas informativa");
+  if (indiceAviso !== -1) {
+    avisoTexto = corpo.slice(indiceAviso).trim();
+    corpo = corpo.slice(0, indiceAviso).trim();
+  }
+
+  const pTexto = document.createElement("p");
+  pTexto.className = "texto-resposta";
+  pTexto.textContent = corpo;
+  bloco.append(pTexto);
+
+  // Fonte da resposta (quando presente)
+  if (Array.isArray(json.fontes) && json.fontes.length) {
+    const divFonte = document.createElement("div");
+    divFonte.className = "fonte-box";
+    divFonte.textContent = "Fonte: " + json.fontes.join("; ");
+    bloco.append(divFonte);
+  }
+
+  // Aviso legal sempre visível e destacado
+  const divAviso = document.createElement("div");
+  divAviso.className = "aviso-legal";
+  divAviso.textContent = avisoTexto;
+  bloco.append(divAviso);
+
+  conversa.append(bloco);
+  conversa.scrollTop = conversa.scrollHeight;
+}
+
+function atualizarExibicaoReceita(dadosReceita) {
+  listaRemedios.innerHTML = "";
+  const meds = (dadosReceita && Array.isArray(dadosReceita.medicamentos)) ? dadosReceita.medicamentos : [];
+  if (!meds.length) {
+    spanLidos.textContent = "Nenhum medicamento identificado na receita.";
+    btnLimpar.style.display = "none";
+    return;
+  }
+
+  spanLidos.textContent =
+    "Remédios lidos: " + meds.map(m => `${m.nome} (${m.posologia})`).join(", ");
+
+  for (const m of meds) {
+    const chip = document.createElement("div");
+    chip.className = "chip-remedio";
+    const strong = document.createElement("strong");
+    strong.textContent = m.nome;
+    chip.append(strong);
+    if (m.posologia) {
+      chip.append(document.createTextNode(` — ${m.posologia}`));
+    }
+    listaRemedios.append(chip);
+  }
+  btnLimpar.style.display = "inline-block";
+}
+
+btnLimpar.onclick = () => {
+  receita = null;
+  inputArquivo.value = "";
+  spanLidos.textContent = "";
+  listaRemedios.innerHTML = "";
+  btnLimpar.style.display = "none";
+  labelArquivo.textContent = "📎 Anexar receita (PNG, JPG ou PDF)";
 };
 
-document.getElementById("form").onsubmit = async (e) => {
+inputArquivo.onchange = async (e) => {
+  const arquivo = e.target.files[0];
+  if (!arquivo) return;
+
+  labelArquivo.textContent = "⏳ Lendo receita...";
+  spanLidos.textContent = "Processando receita em memória...";
+  listaRemedios.innerHTML = "";
+
+  try {
+    const dados = new FormData();
+    dados.append("arquivo", arquivo);
+    const r = await fetch("/receita", { method: "POST", body: dados });
+    const json = await r.json();
+    labelArquivo.textContent = `📎 Receita: ${arquivo.name}`;
+    if (!r.ok) {
+      spanLidos.textContent = "";
+      return mostrar(json.detail || "Erro ao ler a receita.", "erro-msg");
+    }
+    receita = json;
+    atualizarExibicaoReceita(receita);
+  } catch (err) {
+    labelArquivo.textContent = "📎 Anexar receita (PNG, JPG ou PDF)";
+    spanLidos.textContent = "";
+    mostrar("Falha de conexão ao enviar a receita.", "erro-msg");
+  }
+};
+
+document.querySelectorAll(".sugestao-btn").forEach((btn) => {
+  btn.onclick = () => {
+    campoPergunta.value = btn.getAttribute("data-pergunta") || "";
+    campoPergunta.focus();
+  };
+});
+
+form.onsubmit = async (e) => {
   e.preventDefault();
-  const campo = document.getElementById("pergunta");
-  mostrar(campo.value, "usuario");
-  const r = await fetch("/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pergunta: campo.value, receita }),
-  });
-  campo.value = "";
-  const json = await r.json();
-  if (!r.ok) return mostrar(json.detail);
-  mostrar(json.resposta, json.categoria === "encaminhar" ? "encaminhar" : "");
-  if (json.fontes.length) mostrar("Fonte: " + json.fontes.join("; "));
+  const textoPergunta = campoPergunta.value.trim();
+  if (!textoPergunta) return;
+
+  mostrar(textoPergunta, "usuario");
+  campoPergunta.value = "";
+  btnEnviar.disabled = true;
+  btnEnviar.textContent = "Consultando...";
+
+  try {
+    const r = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pergunta: textoPergunta, receita }),
+    });
+    const json = await r.json();
+    if (!r.ok) {
+      mostrar(json.detail || "Erro ao processar a pergunta.", "erro-msg");
+    } else {
+      mostrarRespostaAssistente(json);
+    }
+  } catch (err) {
+    mostrar("Não foi possível conectar ao servidor.", "erro-msg");
+  } finally {
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = "Enviar";
+  }
 };
 </script>
 </body>
