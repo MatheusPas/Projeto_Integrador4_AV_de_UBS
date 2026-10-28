@@ -1,0 +1,50 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 827 >>
+stream
+BT
+/F1 12 Tf
+50 760 Td
+18 TL
+(PREFEITURA MUNICIPAL DE VITÓRIA - SEMUS) Tj T*
+(UBS Maria Ortiz - Vitória/ES) Tj T*
+(RECEITUÁRIO MÉDICO \(DOCUMENTO FICTÍCIO - SEM CPF\)) Tj T*
+(----------------------------------------------------------------) Tj T*
+(Paciente: Paciente Fictício) Tj T*
+(Data: 27/10/2026) Tj T*
+(----------------------------------------------------------------) Tj T*
+(PRESCRIÇÃO MÉDICA:) Tj T*
+(1\) Medicamento: aas | Posologia: 100 mg, 1 comprimido uma vez ao dia, 30 minutos antes do almoço) Tj T*
+(2\) Medicamento: dipirona | Posologia: 500 mg/mL, 20 gotas de 6 em 6 horas se dor ou febre) Tj T*
+(----------------------------------------------------------------) Tj T*
+(Médico\(a\): Dra. Médica Fictícia - CRM-ES 00000 \(FICTÍCIO\)) Tj T*
+(Receita inventada para testes academicos. Nenhum dado real.) Tj T*
+ET
+
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000338 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1216
+%%EOF
