@@ -11,13 +11,13 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 
 - **Prompt:** "Faça o que é possível sem termos a parte do João, sem dar commit e sem o roteiro do vídeo."
 - **Uso da IA:** criação das 40 perguntas de `eval/dataset.jsonl` (com termos esperados e termos que contradizem a bula, tirados de `data/kb/`), do `eval/run_eval.py` (indicadores da C1, pausa entre perguntas, nova tentativa no erro 429), do teste `eval/test_run_eval.py` (com o LLM simulado) e do modelo de `eval/resultados_c2.md`.
-- **Minhas decisões:** <!-- ex.: revisar as perguntas, os termos esperados e as metas --> 
+- **Minhas decisões:** seguir a divisão de 40 perguntas e as metas da C1; usar só receitas fictícias; fazer agora o que não depende da triagem do João e deixar a rodada oficial para depois do merge dela; não usar a IA para o roteiro do vídeo, que será feito no fim, com o grupo.
 
 ## Dados primários (`Documentacao/dados_primarios.md`)
 
 - **Prompt:** pesquisa de dados do DATASUS (CNES, e-Gestor, SISAB) e da SEMUS sobre Vitória, com fonte e data, sem inventar números.
-- **Uso da IA:** busca na web e organização das fontes. Os dados que dependem de formulário do DATASUS ficaram marcados para consulta manual.
-- **Minhas decisões:** <!-- ex.: quais fontes aceitar e conferência dos números --> 
+- **Uso da IA:** busca na web, consultas ao CNES e ao TabNet/DATASUS (equipes de saúde e produção ambulatorial de Vitória) e organização das fontes. A cobertura da APS e o SISAB ficaram marcados para consulta manual.
+- **Minhas decisões:** priorizar fontes oficiais (DATASUS e Prefeitura) com competência e data de consulta; separar como "fontes secundárias" os números de jornal e de artigo; não usar números sem fonte confirmada.
 
 ## Commits e Pull Request
 
@@ -28,6 +28,6 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 ## Revisão
 
 - [ ] Li as 40 perguntas e os termos esperados de cada uma.
-- [ ] Preenchi os dados do DATASUS que faltavam e conferi as fontes.
+- [ ] Conferi no TabNet os números de equipes e de produção e completei a cobertura da APS e o SISAB.
 - [ ] Rodei `python -m eval.run_eval` com a triagem do João e preenchi `eval/resultados_c2.md`.
 - [ ] Sei explicar o eval no vídeo.
