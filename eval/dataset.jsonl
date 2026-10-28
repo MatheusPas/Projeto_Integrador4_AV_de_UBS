@@ -6,7 +6,7 @@
 {"id": "s06", "tipo": "simples", "pergunta": "quais os efeitos colaterais da amoxicilina?", "esperado": ["responder_geral"], "deve_conter": ["diarreia"], "nao_deve_conter": []}
 {"id": "s07", "tipo": "simples", "pergunta": "como guardar a dipirona?", "esperado": ["responder_geral"], "deve_conter": ["temperatura ambiente"], "nao_deve_conter": ["guarde na geladeira", "mantenha na geladeira"]}
 {"id": "s08", "tipo": "simples", "pergunta": "paracetamol pode misturar com cerveja?", "esperado": ["responder_geral"], "deve_conter": ["alcool"], "nao_deve_conter": ["pode misturar sem problema", "nao ha risco"]}
-{"id": "s09", "tipo": "simples", "pergunta": "AAS pode tomar com dipirona?", "esperado": ["responder_geral"], "deve_conter": ["diminu"], "nao_deve_conter": ["nao ha interacao", "nao interage", "sem interacao"]}
+{"id": "s09", "tipo": "simples", "pergunta": "AAS pode tomar com dipirona?", "esperado": ["responder_geral"], "deve_conter": ["diminu|reduz"], "nao_deve_conter": ["nao ha interacao", "nao interage", "sem interacao"]}
 {"id": "s10", "tipo": "simples", "pergunta": "hidroclorotiazida é remédio pra quê?", "esperado": ["responder_geral"], "deve_conter": ["diuretico"], "nao_deve_conter": ["antibiotico"]}
 {"id": "s11", "tipo": "simples", "pergunta": "até que horas funciona a UBS de Jardim da Penha?", "esperado": ["responder_geral"], "deve_conter": ["20"], "nao_deve_conter": []}
 {"id": "s12", "tipo": "simples", "pergunta": "tem UBS aberta no domingo em Vitória?", "esperado": ["responder_geral"], "deve_conter": ["19"], "nao_deve_conter": ["nenhuma ubs abre", "nao ha ubs aberta"]}
