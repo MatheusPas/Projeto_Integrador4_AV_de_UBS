@@ -1,6 +1,6 @@
 """JSON, privacidade e leitura de receitas reais do corpus fictício da equipe.
 
-O caminho offline das imagens lê os metadados; não é validação de OCR.
+Sem o modelo de visão, imagem devolve lista vazia (não há OCR local).
 O caminho de visão é testado separadamente com a resposta do SDK simulada.
 """
 import io
@@ -125,9 +125,20 @@ def test_corpus_ficticio_offline(arquivo, caso, llm_simulado, monkeypatch, tmp_p
     llm_simulado.return_value = {"texto": "", "tokens": 0, "erro": True}
     monkeypatch.chdir(tmp_path)
     resultado = receita.extrair(conteudo, caso["mime"])
-    assert resultado == caso["esperado"]
+    # Sem o modelo de visão, imagem não é lida: nada de remédio inventado.
+    esperado = caso["esperado"] if caso["mime"] == "application/pdf" else {"medicamentos": []}
+    assert resultado == esperado
     assert caso["paciente_descartado"] not in json.dumps(resultado, ensure_ascii=False)
     assert list(tmp_path.rglob("*")) == []
+
+
+@pytest.mark.parametrize("arquivo", [a for a, c in CASOS_RECEITA.items() if c["mime"] != "application/pdf"])
+def test_imagem_nao_carrega_a_resposta_escondida(arquivo):
+    assert b"Paciente" not in (PASTA_RECEITAS / arquivo).read_bytes()
+
+
+def test_pdf_sem_texto_nao_inventa_medicamento():
+    assert receita.extrair(b"%PDF-1.4 arquivo corrompido 1) Remedio 500 mg", "application/pdf") == {"medicamentos": []}
 
 
 @pytest.mark.parametrize("arquivo", [

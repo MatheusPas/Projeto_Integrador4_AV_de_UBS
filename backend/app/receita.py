@@ -40,9 +40,6 @@ PROMPT_RECEITA = (
     '{"medicamentos": [{"nome": "...", "posologia": "..."}]}'
 )
 
-# Referência original de llm.gerar para detectar quando um teste (pytest) aplica mock nela
-_LLM_GERAR_ORIGINAL = llm.gerar
-
 # Sais e termos farmacêuticos que não fazem parte do nome curto usado na base (data/kb/)
 _SAIS_IGNORADOS = (
     r"\b(cloridrato\s+de|pot[aá]ssica|s[oó]dica|monoidratada|"
@@ -158,7 +155,7 @@ def _parsear_resposta(texto: str) -> list[dict]:
 
 
 def _extrair_por_regex(texto: str) -> list[dict]:
-    """Extrai medicamentos e posologias de texto estruturado de receita (PDF/metadados)."""
+    """Extrai medicamentos e posologias de texto estruturado de receita em PDF."""
     if not texto:
         return []
 
@@ -206,54 +203,13 @@ def _extrair_por_regex(texto: str) -> list[dict]:
 
 def _extrair_texto_pdf(conteudo: bytes) -> str:
     """Lê o texto de um PDF em memória usando pypdf, sem salvar arquivo."""
+    # PDF escaneado (só imagem) ou corrompido devolve texto vazio: melhor
+    # "nenhum medicamento" do que tentar ler bytes crus e inventar remédio.
     try:
         leitor = PdfReader(io.BytesIO(conteudo))
-        paginas = [p.extract_text() or "" for p in leitor.pages]
-        texto = "\n".join(paginas).strip()
-        if texto:
-            return texto
+        return "\n".join(p.extract_text() or "" for p in leitor.pages).strip()
     except Exception:
-        pass
-    # Fallback caso um teste unitário passe texto puro com mime application/pdf
-    try:
-        return conteudo.decode("utf-8")
-    except UnicodeDecodeError:
-        return conteudo.decode("cp1252", errors="ignore")
-
-
-def _extrair_texto_metadados_imagem(conteudo: bytes) -> str:
-    """Lê comentário embutido (JPEG COM ou PNG tEXt) em memória como fallback offline."""
-    if not conteudo:
         return ""
-    # JPEG COM marker (0xFF 0xFE)
-    if len(conteudo) > 6 and conteudo[:2] == b"\xff\xd8":
-        pos = 2
-        while pos + 4 <= len(conteudo) and conteudo[pos] == 0xFF:
-            marker = conteudo[pos + 1]
-            if marker == 0xDA or marker == 0xD9:  # SOS ou EOI
-                break
-            tamanho = (conteudo[pos + 2] << 8) | conteudo[pos + 3]
-            if tamanho < 2 or pos + 2 + tamanho > len(conteudo):
-                break
-            if marker == 0xFE:
-                return conteudo[pos + 4 : pos + 2 + tamanho].decode("utf-8", errors="ignore")
-            pos += 2 + tamanho
-
-    # PNG tEXt chunk ("tEXtComment\x00...")
-    if len(conteudo) > 24 and conteudo[:8] == b"\x89PNG\r\n\x1a\n":
-        pos = 8
-        while pos + 12 <= len(conteudo):
-            tamanho = int.from_bytes(conteudo[pos : pos + 4], "big")
-            tipo = conteudo[pos + 4 : pos + 8]
-            dados = conteudo[pos + 8 : pos + 8 + tamanho]
-            if tipo == b"tEXt" and b"\x00" in dados:
-                _, texto_bytes = dados.split(b"\x00", 1)
-                return texto_bytes.decode("utf-8", errors="ignore")
-            if tipo == b"IEND":
-                break
-            pos += 12 + tamanho
-
-    return ""
 
 
 def _chamar_visao_groq(conteudo: bytes, mime: str) -> list[dict]:
@@ -281,7 +237,7 @@ def _chamar_visao_groq(conteudo: bytes, mime: str) -> list[dict]:
         )
         texto = resposta.choices[0].message.content or ""
         return _parsear_resposta(texto)
-    except (RateLimitError, APIConnectionError, APIError, Exception):
+    except (RateLimitError, APIConnectionError, APIError):
         return []
 
 
@@ -292,38 +248,21 @@ def extrair(conteudo: bytes, mime: str) -> dict:
 
     mime_limpo = mime.lower().strip()
 
-    # Se os testes automatizados (pytest) simularam llm.gerar, respeita o mock
-    if llm.gerar is not _LLM_GERAR_ORIGINAL:
-        contexto = _extrair_texto_pdf(conteudo) if mime_limpo == "application/pdf" else f"[imagem {mime_limpo}]"
-        saida = llm.gerar(PROMPT_RECEITA, contexto)
-        if isinstance(saida, dict) and not saida.get("erro"):
-            meds_mock = _parsear_resposta(saida.get("texto", ""))
-            if meds_mock:
-                return {"medicamentos": meds_mock}
-
     if mime_limpo == "application/pdf":
         texto_pdf = _extrair_texto_pdf(conteudo)
         if not texto_pdf:
             return {"medicamentos": []}
         # Tenta extração estruturada por regex primeiro (rápida e determinística) e via LLM se necessário
         meds = _extrair_por_regex(texto_pdf)
-        if not meds and os.getenv("GROQ_API_KEY"):
+        if not meds:
             saida = llm.gerar(PROMPT_RECEITA, f"Texto da receita:\n{texto_pdf}")
             if not saida.get("erro"):
                 meds = _parsear_resposta(saida.get("texto", ""))
         return {"medicamentos": meds}
 
     if mime_limpo.startswith("image/"):
-        meds = _chamar_visao_groq(conteudo, mime_limpo)
-        if not meds:
-            # Fallback para leitura em memória quando sem GROQ_API_KEY (ex.: pytest offline)
-            texto_local = _extrair_texto_metadados_imagem(conteudo)
-            if not texto_local:
-                try:
-                    texto_local = conteudo.decode("utf-8", errors="ignore")
-                except Exception:
-                    texto_local = ""
-            meds = _extrair_por_regex(texto_local) or _parsear_resposta(texto_local)
-        return {"medicamentos": meds}
+        # Só o modelo de visão lê imagem; se ele falhar, a tela mostra
+        # "nenhum medicamento identificado" em vez de um remédio inventado.
+        return {"medicamentos": _chamar_visao_groq(conteudo, mime_limpo)}
 
     return {"medicamentos": []}

@@ -14,8 +14,8 @@
 |---|---|---|---|
 | Matheus | Backend, LLM e integração | `secaoMatheus` | ✅ entregue na `main` |
 | Lucas | Base de conhecimento e busca (RAG) | `secaoLucas` | ✅ entregue na `main` |
-| João | Triagem, segurança e testes | `secaoJoao` | a fazer |
-| Eduardo | Receita (imagem/PDF) e tela do chat | `secaoEduardo` | a fazer |
+| João | Triagem, segurança e testes | `secaoJoao` | ✅ na `main` · falta o `prompts_ia/joao.md` |
+| Eduardo | Receita (imagem/PDF) e tela do chat | `secaoEduardo` | ✅ na `main` |
 | Gessiele | Eval, dados DATASUS/SEMUS e vídeo | `secaoGessiele` | ✅ eval e dados na `main` · falta a rodada oficial e o vídeo |
 
 Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ninguém tem conflito.
@@ -37,11 +37,14 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 
 ## João — Triagem, segurança e testes
 
+**Entregue (29/10):** `triagem.py`, `prompts.py` e a pasta `tests/`. O Lucas acrescentou 3 casos de risco que a triagem deixava passar (ingestão acidental, gravidez/amamentação e mal-estar depois do remédio) e restaurou o `tests/README.md`. `python -m pytest`: 463 testes passando. Eval das 40 perguntas: 100% em todos os indicadores.
+**Falta:** criar `Documentacao/prompts_ia/joao.md` (registro de uso de IA, modelo: `lucas.md`).
+
 **Seus arquivos:** `backend/app/triagem.py`, `backend/app/prompts.py`, pasta `tests/`
 
 `triagem.py` e `prompts.py` já existem como esqueleto: troque o conteúdo, mantendo `classificar(pergunta, receita)`, `CATEGORIAS` e `SISTEMA`. Atenção: o pipeline só usa a receita quando a triagem devolve `responder_personalizado`.
 
-- [ ] `triagem.py`, por regras (sem LLM):
+- [x] `triagem.py`, por regras (sem LLM):
   - sintoma + pedido de remédio → `encaminhar` **sempre, mesmo com receita**;
   - mudar, parar ou começar tratamento → `encaminhar`;
   - urgência (dor no peito, falta de ar, desmaio, overdose, alergia grave) → `encaminhar` + SAMU 192;
@@ -49,10 +52,10 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
   - assunto fora de saúde → `fora_escopo`;
   - remédio que está na receita → `responder_personalizado`; senão → `responder_geral`.
   > **Referência pronta:** `eval/dataset.jsonl` (da Gessiele) tem 40 perguntas com a categoria esperada de cada uma (campo `esperado`). A triagem precisa acertar todas as de risco, injeção e fora do tema, inclusive "sinto azia toda noite, o omeprazol resolve?" (`encaminhar`) e as duas com receita (`responder_personalizado`). Bom para os casos do `test_triagem.py`.
-- [ ] `prompts.py`: prompt de sistema (só informar, usar só os trechos da busca, citar a fonte, nunca sugerir uso).
+- [x] `prompts.py`: prompt de sistema (só informar, usar só os trechos da busca, citar a fonte, nunca sugerir uso).
   > **Visto no teste real (28/10):** o `gpt-oss-120b` às vezes coloca marcações como `【1†L1-L3】` depois da frase. O prompt deve pedir para não usar esse tipo de marcação e citar a fonte só por extenso (ou o Matheus limpa no `pipeline.py`). No vídeo isso fica feio.
   > **Visto na prévia do eval (28/10):** marcações como `【1】` ou `[1]` apareceram em pelo menos 9 de 15 respostas. E em "AAS pode tomar com dipirona?" o modelo começou com "Sim." antes de avisar do risco: o prompt deve pedir para não começar com "sim" ou "pode" quando a bula traz um alerta.
-- [ ] Testes com `pytest`, sem chamar o Groq de verdade (simule `llm.gerar`):
+- [x] Testes com `pytest`, sem chamar o Groq de verdade (simule `llm.gerar`):
   - `test_triagem.py`: pelo menos 25 casos, um grupo por regra;
   - `test_rag.py`: usar `data/casos_teste_rag.json` + checar o formato do retorno;
   - `test_receita.py`: JSON lido corretamente e nome do paciente descartado;
@@ -62,14 +65,16 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 
 ## Eduardo — Receita e tela do chat
 
+**Entregue (27/10):** `receita.py`, `frontend/index.html` e as 5 receitas fictícias. O Lucas corrigiu em 29/10: imagem só é lida pelo modelo de visão (sem IA, a tela mostra "nenhum medicamento" em vez de remédio inventado), o texto com a resposta escondido nos metadados das imagens foi removido, e o `**negrito**` da resposta aparece sem asteriscos. O modelo de visão real leu as 5 receitas certas, inclusive a foto torta.
+
 **Seus arquivos:** `backend/app/receita.py`, pasta `frontend/`, `data/receitas_ficticias/`
 
 `receita.py` e `frontend/index.html` já existem como esqueleto: troque o conteúdo, mantendo `extrair(conteudo, mime)`. No frontend, reaproveite os `fetch` (já reenviam a receita a cada mensagem).
 
-- [ ] 4–5 receitas **inventadas** (PNG/JPG + 1 PDF), com "Paciente Fictício" e sem CPF. Uma com foto torta.
-- [ ] `receita.py`: imagem → modelo de visão do Groq; PDF → texto com `pypdf`. Devolver só nome do remédio + posologia. **Não salvar o arquivo.** Modelo de visão: `qwen/qwen3.8-27b` (o `meta-llama/llama-4-scout-17b-16e-instruct` saiu do Groq; o Qwen está em "preview" e pode mudar, confira em https://console.groq.com/docs/vision).
-- [ ] `frontend/`: chat com botão de anexar receita, mostrar os remédios lidos, a fonte da resposta e o aviso legal, e destacar quando a resposta for encaminhamento.
-- [ ] Passar ao João o resultado esperado de cada receita (para `test_receita.py`).
+- [x] 4–5 receitas **inventadas** (PNG/JPG + 1 PDF), com "Paciente Fictício" e sem CPF. Uma com foto torta.
+- [x] `receita.py`: imagem → modelo de visão do Groq; PDF → texto com `pypdf`. Devolver só nome do remédio + posologia. **Não salvar o arquivo.** Modelo de visão: `qwen/qwen3.8-27b` (o `meta-llama/llama-4-scout-17b-16e-instruct` saiu do Groq; o Qwen está em "preview" e pode mudar, confira em https://console.groq.com/docs/vision).
+- [x] `frontend/`: chat com botão de anexar receita, mostrar os remédios lidos, a fonte da resposta e o aviso legal, e destacar quando a resposta for encaminhamento.
+- [x] Passar ao João o resultado esperado de cada receita (para `test_receita.py`).
 
 **Pronto quando:** anexar uma receita fictícia mostra os remédios lidos e a pergunta seguinte usa a posologia dela.
 
