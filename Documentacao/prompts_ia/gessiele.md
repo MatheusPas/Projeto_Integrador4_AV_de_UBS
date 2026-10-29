@@ -27,7 +27,7 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 
 ## Revisão
 
-- [ ] Li as 40 perguntas e os termos esperados de cada uma.
-- [ ] Conferi no TabNet os números de equipes e de produção e completei a cobertura da APS e o SISAB.
-- [ ] Rodei `python -m eval.run_eval` com a triagem do João e preenchi `eval/resultados_c2.md`.
-- [ ] Sei explicar o eval no vídeo.
+- [x] Li as 40 perguntas e os termos esperados de cada uma.
+- [x] Conferi no TabNet os números de equipes e de produção e completei a cobertura da APS e o SISAB.
+- [x] Rodei `python -m eval.run_eval` com a triagem do João e preenchi `eval/resultados_c2.md`.
+- [x] Sei explicar o eval no vídeo.
