@@ -20,7 +20,7 @@ def llm_simulado(monkeypatch):
     monkeypatch.setattr(llm, "_cliente", cliente_proibido)
     # Também impede clientes instanciados diretamente pelo leitor de receitas.
     monkeypatch.setattr("groq.Groq.__init__", cliente_proibido)
-    gerar = Mock(return_value={"texto": "Informação fictícia da fonte [1].", "tokens": 12, "erro": False})
+    gerar = Mock(return_value={"texto": "Informação fictícia baseada nos trechos fornecidos.", "tokens": 12, "erro": False})
     monkeypatch.setattr(llm, "gerar", gerar)
     return gerar
 

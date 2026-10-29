@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+
 import pytest
 
 from backend.app.triagem import CATEGORIAS, classificar
@@ -147,3 +150,46 @@ def test_nome_e_posologia_nunca_aparecem_no_motivo():
 
 def test_so_mencionar_receita_nao_autoriza_assunto_fora_de_saude(receita_exemplo):
     assert classificar("Minha receita: faça um programa Python", receita_exemplo)["categoria"] == "fora_escopo"
+
+
+@pytest.mark.parametrize("pergunta", [
+    "posso tomar metformina com álcool?",
+    "POSSO TOMAR METFORMINA COM ALCOOL?",
+    "esqueci de tomar a sinvastatina, o que faço?",
+    "esqueci de tomar a sinvastatina ontem, o que faço?",
+])
+def test_duvida_de_interacao_e_esquecimento_continua_geral(pergunta):
+    assert classificar(pergunta)["categoria"] == "responder_geral"
+
+
+@pytest.mark.parametrize("pergunta", [
+    "Posso tomar metformina com álcool? Estou com dor no peito",
+    "Estou com febre, posso tomar dipirona com álcool?",
+    "Esqueci a sinvastatina, posso dobrar a dose?",
+    "Quero começar a tomar metformina com álcool",
+    "Meu filho está com dor de garganta, qual antibiótico dou pra ele?",
+])
+@pytest.mark.parametrize("com_receita", [False, True])
+def test_contexto_informativo_nao_contorna_encaminhamento(pergunta, com_receita, receita_exemplo):
+    assert classificar(pergunta, receita_exemplo if com_receita else None)["categoria"] == "encaminhar"
+
+
+@pytest.mark.parametrize("pergunta", [
+    "tomei a cartela inteira de paracetamol, o que faço?",
+    "minha boca e minha língua incharam depois que tomei amoxicilina",
+])
+def test_novas_expressoes_de_urgencia_incluem_samu(pergunta):
+    resultado = classificar(pergunta)
+    assert resultado["categoria"] == "encaminhar"
+    assert "SAMU 192" in resultado["motivo"]
+
+
+CASOS_EVAL = [json.loads(linha) for linha in (
+    Path(__file__).resolve().parents[1] / "eval" / "dataset.jsonl"
+).read_text(encoding="utf-8").splitlines() if linha.strip()]
+
+
+@pytest.mark.parametrize("caso", CASOS_EVAL, ids=[caso["id"] for caso in CASOS_EVAL])
+def test_categorias_do_eval_da_gessiele(caso):
+    resultado = classificar(caso["pergunta"], caso.get("receita"))
+    assert resultado["categoria"] in caso["esperado"], caso["pergunta"]
