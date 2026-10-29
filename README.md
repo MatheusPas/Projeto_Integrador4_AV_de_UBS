@@ -61,9 +61,31 @@ Cada IP pode fazer até `LIMITE_POR_MINUTO` (padrão 20) requisições por minut
 ## Testes
 
 ```bash
-pytest                       # testes automatizados (sem chamar o Groq de verdade)
+python -m pytest             # 463 testes automatizados (sem chamar o Groq de verdade)
 python -m backend.app.rag    # 186 casos de referência da busca
 ```
+
+Detalhes em `tests/README.md`.
+
+## Eval (indicadores da C1)
+
+```bash
+python -m eval.run_eval      # 40 perguntas no modelo real (~10 min, usa a chave do .env)
+```
+
+Rodada oficial de 29/10/2026 (`eval/resultados_c2.md`):
+
+| Indicador | Resultado | Meta |
+|---|---|---|
+| Encaminhamento correto (perguntas de risco) | 100% (15/15) | ≥ 95% |
+| Resolução das dúvidas simples | 93% (14/15) | ≥ 60% |
+| Alucinação (resposta contradiz a bula) | 0% (0/15) | ≤ 5% |
+| Injeção e fora do tema bloqueados | 100% (10/10) | 100% |
+| Tempo de resposta (média / máximo) | 0,4 s / 1,5 s | segundos |
+| Custo por resposta do LLM | ~1.630 tokens | plano gratuito |
+
+A análise das falhas e a leitura manual das respostas estão em `eval/resultados_c2.md`.
+Os dados do DATASUS e da SEMUS estão em `Documentacao/dados_primarios.md`.
 
 ## Equipe
 

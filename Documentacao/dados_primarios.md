@@ -51,21 +51,41 @@ Cuidados ao citar:
 - "Por local de atendimento" conta tudo o que foi feito em Vitória, incluindo hospitais e serviços estaduais que atendem a Grande Vitória.
 - A maior parte da produção das UBS (consultas, visitas) é registrada no SISAB, e não no SIA. Por isso a linha "Atenção Básica" do SIA fica baixa.
 
-**Ainda não obtido.** Os painéis abaixo só abrem por formulário interativo no navegador:
+**Cobertura potencial da Atenção Primária**, competência jul/2026, consultado em 29/10/2026.
+Fonte: e-Gestor APS/Ministério da Saúde, "Cobertura Potencial da APS (2021 - atual)" (https://relatorioaps.saude.gov.br/cobertura/aps). Filtro: Municípios = Vitória-ES; competência CNES ago/2025 a jul/2026.
 
-| Dado | Como obter |
+| Dado (jul/2026) | Valor |
 |---|---|
-| Cobertura da Atenção Primária (%) | https://egestorab.saude.gov.br → Relatórios públicos → Cobertura da APS → ES / Vitória |
-| Atendimentos individuais nas UBS (SISAB) | https://sisab.saude.gov.br → Relatórios → Saúde/Produção → Município Vitória-ES → competências de 2025 → "Atendimento individual" |
+| População usada pelo Ministério | 343.378 |
+| Equipes de Saúde da Família (eSF) | 86 |
+| Equipes de Atenção Primária (eAP), 20 h e 30 h | 18 (2 + 16) |
+| Equipes de Consultório na Rua (eCR) | 2 |
+| Capacidade de atendimento das equipes (pessoas) | 346.500 |
+| **Cobertura potencial da APS** | **100,90%** |
+
+A cobertura ficou entre 100,03% e 101,30% em todos os meses de ago/2025 a jul/2026. "Potencial" quer dizer que a capacidade instalada das equipes comporta toda a população; não quer dizer que todos são atendidos. O antigo endereço do e-Gestor (egestorab.saude.gov.br) não responde mais; os relatórios públicos passaram para relatorioaps.saude.gov.br.
+
+**Atendimentos individuais na Atenção Primária (SISAB)**, consultado em 29/10/2026.
+Fonte: SISAB/Ministério da Saúde, relatório "Saúde: Atendimento/Visita" (https://sisab.saude.gov.br/paginas/acessoRestrito/relatorio/federal/saude/RelSauProducao.xhtml). Filtro: Município = Vitória; Tipo de Produção = Atendimento Individual; Linha = Competência.
+
+| Período | Atendimentos individuais | Média por mês |
+|---|---|---|
+| jan a set/2026 | 908.031 | **100.892** |
+| 2025 (ano inteiro) | 986.773 | 82.231 |
+
+Cuidados ao citar:
+- Use o número de **2026 (~101 mil por mês)**, que é estável: todos os meses ficaram entre 87.839 e 115.941.
+- Em 2025 a série muda de patamar: cerca de 37 mil por mês de jan a mai/2025, depois cerca de 100 mil por mês a partir de jun/2025, com um pico de 178.444 em jul/2025. O mais provável é uma mudança na forma de envio dos dados ao SISAB, e não no atendimento. Por isso o total de 2025 subestima a produção real.
+- "Atendimento individual" conta consultas de médicos, enfermeiros e outros profissionais de nível superior nas equipes da APS. Não inclui atendimento odontológico, procedimentos nem visitas domiciliares (relatados à parte no SISAB).
 
 ## 4. Outros dados (fontes secundárias, não oficiais)
 
 | Dado | Fonte |
 |---|---|
 | A rede municipal faz em média **326 mil consultas por mês** (médicas, odontológicas, multiprofissionais e especializadas). Cerca de 32 mil podem ser agendadas pela internet. | Jornal A Tribuna, 27/03/2025: https://tribunaonline.com.br/_/234889 |
-| Em 2022, Vitória tinha **22 farmácias** nas Unidades de Saúde, todas com farmacêutico | Artigo na revista Physis, 2024: https://scielosp.org/pdf/physis/2024.v34/e34002/pt (conferir no PDF antes de citar) |
+| Em 2022, Vitória tinha **22 farmácias** nas Unidades de Saúde, todas com farmacêutico | Artigo na revista Physis, 2024: https://scielosp.org/pdf/physis/2024.v34/e34002/pt (não conferido: o PDF fica atrás de uma verificação anti-robô; não usar no vídeo sem conferir) |
 
 ## 5. Por que esses dados importam para o projeto
 
-- Vitória tem 29 UBS, 124 equipes de Saúde da Família e de Atenção Primária, centenas de milhares de consultas por mês e um farmacêutico em cada farmácia municipal. Isso reforça o argumento da C1: um chat que responde às dúvidas simples sobre medicamentos alivia o atendimento presencial.
+- Vitória tem 29 UBS, cobertura potencial da Atenção Primária de 100,9% e cerca de 101 mil atendimentos individuais por mês nas equipes da APS (SISAB, 2026). Com essa demanda, cada dúvida simples sobre medicamento que o chat responde é um atendimento presencial a menos, o que reforça o argumento da C1.
 - A lista oficial das 29 UBS é a base das respostas administrativas do chat: horário, endereço e onde retirar remédio.
