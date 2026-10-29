@@ -511,7 +511,16 @@ function mostrarRespostaAssistente(json) {
 
   const pTexto = document.createElement("p");
   pTexto.className = "texto-resposta";
-  pTexto.textContent = corpo;
+  // **negrito** do modelo vira <strong>; o resto continua como texto puro (sem innerHTML)
+  corpo.split(/\*\*(.+?)\*\*/).forEach((parte, i) => {
+    if (i % 2) {
+      const forte = document.createElement("strong");
+      forte.textContent = parte;
+      pTexto.append(forte);
+    } else {
+      pTexto.append(parte);
+    }
+  });
   bloco.append(pTexto);
 
   // Fonte da resposta (quando presente)
