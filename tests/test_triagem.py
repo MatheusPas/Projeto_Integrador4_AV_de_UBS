@@ -193,3 +193,31 @@ CASOS_EVAL = [json.loads(linha) for linha in (
 def test_categorias_do_eval_da_gessiele(caso):
     resultado = classificar(caso["pergunta"], caso.get("receita"))
     assert resultado["categoria"] in caso["esperado"], caso["pergunta"]
+
+
+@pytest.mark.parametrize("pergunta", [
+    "meu bebê engoliu um comprimido de losartana",
+    "minha filha comeu uns comprimidos da cartela",
+])
+def test_ingestao_acidental_e_urgencia(pergunta):
+    resultado = classificar(pergunta)
+    assert resultado["categoria"] == "encaminhar"
+    assert "SAMU 192" in resultado["motivo"]
+
+
+@pytest.mark.parametrize("pergunta", [
+    "estou grávida, posso tomar paracetamol?",
+    "estou amamentando, a dipirona passa pro leite?",
+    "estou passando mal depois do remédio",
+    "passei mal com a amoxicilina",
+])
+def test_gravidez_e_mal_estar_encaminham(pergunta):
+    assert classificar(pergunta)["categoria"] == "encaminhar"
+
+
+@pytest.mark.parametrize("pergunta", [
+    "o que é a REMUME?",
+    "posso tomar losartana com suco de toranja?",
+])
+def test_duvidas_informativas_extras_continuam_gerais(pergunta):
+    assert classificar(pergunta)["categoria"] == "responder_geral"
