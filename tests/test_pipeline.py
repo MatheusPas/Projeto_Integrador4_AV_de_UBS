@@ -110,3 +110,15 @@ def test_fontes_repetidas_aparecem_uma_unica_vez(llm_simulado, monkeypatch):
     resultado = pipeline.responder("Como guardar metformina?")
     assert resultado["fontes"] == ["Fonte fictícia A", "Fonte fictícia B"]
     assert resultado["tokens"] == llm_simulado.return_value["tokens"]
+
+
+@pytest.mark.parametrize("pergunta", [
+    "posso tomar metformina com álcool?",
+    "esqueci de tomar a sinvastatina, o que faço?",
+    "esqueci de tomar a sinvastatina ontem, o que faço?",
+])
+def test_duvidas_informativas_chegam_ao_llm_com_fonte(pergunta, llm_simulado):
+    resultado = pipeline.responder(pergunta)
+    assert resultado["categoria"] == "responder_geral"
+    assert resultado["fontes"]
+    llm_simulado.assert_called_once()
