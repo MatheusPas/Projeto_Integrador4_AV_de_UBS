@@ -11,7 +11,7 @@ from groq import APIConnectionError, APIError, Groq, RateLimitError
 
 load_dotenv()
 
-# llama-3.3-70b-versatile saiu do Groq; gpt-oss-120b é o maior modelo de texto disponível
+# gpt-oss-120b é o maior modelo de texto do Groq; llama-3.3-70b-versatile fica como alternativa
 MODELO = os.getenv("GROQ_MODELO", "openai/gpt-oss-120b")
 
 MSG_LIMITE = ("Muitas perguntas ao mesmo tempo no serviço de IA (limite do plano gratuito). "

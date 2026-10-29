@@ -16,7 +16,7 @@
 | Lucas | Base de conhecimento e busca (RAG) | `secaoLucas` | ✅ entregue na `main` |
 | João | Triagem, segurança e testes | `secaoJoao` | ✅ na `main` · falta o `prompts_ia/joao.md` |
 | Eduardo | Receita (imagem/PDF) e tela do chat | `secaoEduardo` | ✅ na `main` |
-| Gessiele | Eval, dados DATASUS/SEMUS e vídeo | `secaoGessiele` | ✅ eval e dados na `main` · falta a rodada oficial e o vídeo |
+| Gessiele | Eval, dados DATASUS/SEMUS e vídeo | `secaoGessiele` | ✅ eval oficial na `main` · falta o vídeo |
 
 Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ninguém tem conflito.
 
@@ -91,8 +91,10 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 - [x] `eval/run_eval.py` com os indicadores da C1.
 - [x] `dados_primarios.md` com fonte e data.
 - [ ] Completar em `dados_primarios.md` a cobertura da APS (e-Gestor) e os atendimentos do SISAB, e conferir no PDF o dado da revista Physis antes de usar no vídeo.
-- [ ] **Rodada oficial** (quinta à noite, depois da `triagem.py` e do `prompts.py` do João na `main`): `python -m eval.run_eval` e copiar a tabela e as falhas para `eval/resultados_c2.md`.
+- [x] **Rodada oficial** (quinta à noite, depois da `triagem.py` e do `prompts.py` do João na `main`): `python -m eval.run_eval` e copiar a tabela e as falhas para `eval/resultados_c2.md`.
 - [ ] Roteiro, gravação e publicação do vídeo.
+
+> **Rodada oficial (29/10, 15:44):** 100% de encaminhamento, 93% de resolução (100% na leitura manual), 0% de alucinação, 100% de bloqueio, 0,4 s e ~1.630 tokens por resposta. Ver `eval/resultados_c2.md`.
 
 **Pronto quando:** `eval/resultados_c2.md` tem a tabela da rodada oficial e o vídeo está no YouTube.
 
