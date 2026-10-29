@@ -39,7 +39,13 @@ URGENCIAS = (
     r"\b(?:alergia|reacao alergica) (?:muito )?(?:grave|severa)\b",
     r"\b(?:anafilaxia|choque anafilatico|garganta (?:esta )?fechando)\b",
     r"\b(?:lingua|garganta|rosto|boca|labios)\b.{0,35}\b(?:inchad\w*|inchou|incharam|inchando)\b",
+    # ingestão acidental ("meu bebê engoliu um comprimido")
+    r"\b(?:engoliu|engoli|comeu)\b.{0,40}\b(?:comprimido\w*|remedio\w*|capsula\w*|pilula\w*|cartela)\b",
 )
+# Gravidez/amamentação e mal-estar depois do remédio não são urgência, mas
+# pedem avaliação individual: o assistente não decide se é seguro.
+GRAVIDEZ = r"\b(?:gravida|gestante|gravidez|gestacao|amamentando|amamentacao|amamentar)\b"
+REACAO = r"\b(?:passando mal|passei mal|me sentindo mal|me senti mal|mal estar)\b.{0,40}\b(?:depois|apos|desde|com)\b"
 INJECOES = (
     r"\b(?:ignore|ignorar|desconsidere|esqueca|burl\w*)\b.{0,70}\b(?:regras|instrucoes|restricoes|sistema|prompt|seguranca)\b",
     r"\b(?:ignore|disregard|forget)\b.{0,70}\b(?:instructions|rules|prompt|system)\b",
@@ -70,7 +76,7 @@ ALTERACOES = (
     r"nao (?:tomar|usar) mais)\b",
 )
 CONTEXTO_SAUDE = (
-    r"\b(?:saude|ubs|sus|unidade basica|posto de saude|bula\w*|remedio\w*|medicamento\w*|"
+    r"\b(?:saude|ubs|sus|remume|unidade basica|posto de saude|bula\w*|remedio\w*|medicamento\w*|"
     r"tratamento\w*|receita\w*|prescricao|posologia|dose\w*|comprimido\w*|capsula\w*|"
     r"farmaci\w*|medico\w*|enferm\w*|vacina\w*|diabetes|hipertensao|colesterol|"
     r"antibiotico\w*|analgesico\w*|gestante\w*|gravidez|amament\w*)\b"
@@ -142,6 +148,10 @@ def classificar(pergunta: str, receita: dict | None = None) -> dict:
     tem_sintoma = bool(re.search(SINTOMAS, texto))
     contexto_saude = bool(re.search(CONTEXTO_SAUDE, texto)) or cita_medicamento or tem_sintoma
 
+    if cita_medicamento and re.search(GRAVIDEZ, texto):
+        return resultado("encaminhar", "Uso de medicamento na gravidez ou amamentação exige avaliação de um profissional de saúde.")
+    if re.search(REACAO, texto) and contexto_saude:
+        return resultado("encaminhar", "Mal-estar depois de um medicamento precisa ser avaliado por um profissional de saúde.")
     if contexto_saude and _contem(texto, ALTERACOES):
         return resultado("encaminhar", "Iniciar, suspender ou alterar tratamento exige avaliação de um profissional de saúde.")
     if tem_sintoma and _contem(texto, PEDIDOS_REMEDIO):
@@ -155,7 +165,7 @@ def classificar(pergunta: str, receita: dict | None = None) -> dict:
     # Risco, urgência e alteração de tratamento já foram avaliados acima.
     contexto_informativo = re.search(
         r"\b(?:bula|jejum|refeicao|comida|comer|agua|horario|manha|noite|"
-        r"alcool|alcoolic\w*|cerveja|vinho|interacao|interacoes|junto com)\b", texto)
+        r"alcool|alcoolic\w*|cerveja|vinho|suco|toranja|leite|interacao|interacoes|junto com)\b", texto)
     if pedido_de_uso and contexto_saude and not contexto_informativo:
         return resultado("encaminhar", "Decidir se deve usar um medicamento exige avaliação profissional.")
     if _contem(texto, FORA_TEMA) or not contexto_saude:
