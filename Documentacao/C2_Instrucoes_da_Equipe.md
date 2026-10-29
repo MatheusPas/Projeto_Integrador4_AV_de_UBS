@@ -90,7 +90,7 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 - [x] `eval/dataset.jsonl`: 15 simples, 15 de risco, 5 de injeção e 5 fora do tema.
 - [x] `eval/run_eval.py` com os indicadores da C1.
 - [x] `dados_primarios.md` com fonte e data.
-- [ ] Completar em `dados_primarios.md` a cobertura da APS (e-Gestor) e os atendimentos do SISAB, e conferir no PDF o dado da revista Physis antes de usar no vídeo.
+- [x] Completar em `dados_primarios.md` a cobertura da APS e os atendimentos do SISAB (feito pelo Lucas em 29/10: 100,9% de cobertura e ~101 mil atendimentos por mês). O dado da revista Physis segue sem conferência: não usar no vídeo.
 - [x] **Rodada oficial** (quinta à noite, depois da `triagem.py` e do `prompts.py` do João na `main`): `python -m eval.run_eval` e copiar a tabela e as falhas para `eval/resultados_c2.md`.
 - [ ] Roteiro, gravação e publicação do vídeo.
 
