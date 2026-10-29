@@ -30,9 +30,10 @@ PASTA = Path(__file__).resolve().parent
 
 # Limites do openai/gpt-oss-120b em https://console.groq.com/docs/rate-limits
 # (28/10/2026): 30 req/min, 8.000 tokens/min e 200.000 tokens/dia. Confira os da
-# sua conta em console.groq.com/settings/limits. Cada resposta usa até 1.500
-# tokens (~1.150 no teste de 28/10), então 12 s entre chamadas fica abaixo do limite.
-PAUSA_S = 12
+# sua conta em console.groq.com/settings/limits. Na rodada de 29/10 cada resposta
+# usou ~1.600 tokens (máx. 2.044, pergunta + resposta), então 15 s entre chamadas
+# (4 por minuto) fica abaixo do limite.
+PAUSA_S = 15
 LIMITE_TOKENS_DIA = 200_000
 
 ERROS_LLM = (llm.MSG_LIMITE, llm.MSG_SEM_CHAVE, llm.MSG_INDISPONIVEL)
