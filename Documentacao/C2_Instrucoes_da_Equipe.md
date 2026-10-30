@@ -14,9 +14,9 @@
 |---|---|---|---|
 | Matheus | Backend, LLM e integração | `secaoMatheus` | ✅ entregue na `main` |
 | Lucas | Base de conhecimento e busca (RAG) | `secaoLucas` | ✅ entregue na `main` |
-| João | Triagem, segurança e testes | `secaoJoao` | ✅ na `main` · falta o `prompts_ia/joao.md` |
+| João | Triagem, segurança e testes | `secaoJoao` | ✅ na `main` |
 | Eduardo | Receita (imagem/PDF) e tela do chat | `secaoEduardo` | ✅ na `main` |
-| Gessiele | Eval, dados DATASUS/SEMUS e vídeo | `secaoGessiele` | ✅ eval oficial na `main` · falta o vídeo |
+| Gessiele | Eval, dados DATASUS/SEMUS e vídeo | `secaoGessiele` | ✅ eval oficial na `main` · vídeo editado |
 
 Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ninguém tem conflito.
 
@@ -38,7 +38,6 @@ Cada pessoa mexe **só nos arquivos da sua parte** (listados abaixo). Assim ning
 ## João — Triagem, segurança e testes
 
 **Entregue (29/10):** `triagem.py`, `prompts.py` e a pasta `tests/`. O Lucas acrescentou 3 casos de risco que a triagem deixava passar (ingestão acidental, gravidez/amamentação e mal-estar depois do remédio) e restaurou o `tests/README.md`. `python -m pytest`: 463 testes passando. Eval das 40 perguntas: 100% em todos os indicadores.
-**Falta:** criar `Documentacao/prompts_ia/joao.md` (registro de uso de IA, modelo: `lucas.md`).
 
 **Seus arquivos:** `backend/app/triagem.py`, `backend/app/prompts.py`, pasta `tests/`
 
