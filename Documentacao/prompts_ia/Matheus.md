@@ -38,3 +38,15 @@ Registro exigido pelo edital (seção 11). Ferramenta: **Claude Code** (Anthropi
 - [x] `python -m backend.app.rag` continua com os 186 casos passando.
 - [x] Testado com a chave do Groq: resposta geral (losartana) e personalizada (metformina esquecida) corretas e com fonte.
 - [x] Sei explicar o pipeline e a API no vídeo.
+
+---
+
+# Uso de IA — Matheus Alves Passos (C3)
+
+Mesma ferramenta da C2: **Claude Code** (Anthropic, modelo Claude Opus 5.5). Parte da C3: deploy no Render e ajustes da API (ver `Documentacao/C3_Instrucoes_da_Equipe.md`). Trabalho feito na branch `secaoMatheus`, atualizada a partir da `main`, com um commit por alteração.
+
+## Rota de saúde (`backend/app/main.py`)
+
+- **Prompt:** "Faça as tarefas do Matheus em `C3_Instrucoes_da_Equipe.md`, na branch `secaoMatheus`, com um commit por alteração e atualizando o `Matheus.md`."
+- **Uso da IA:** criação da rota `GET /saude` devolvendo `{"status": "ok"}`, declarada antes de montar o `frontend/` para não ser escondida por ele.
+- **Minhas decisões:** a rota é `GET`, então não conta no limite por IP (que só vale para `POST`) — o Render pode checá-la à vontade sem gastar a cota de ninguém.
