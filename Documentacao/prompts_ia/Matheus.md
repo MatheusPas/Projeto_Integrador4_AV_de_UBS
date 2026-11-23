@@ -50,3 +50,9 @@ Mesma ferramenta da C2: **Claude Code** (Anthropic, modelo Claude Opus 5.5). Par
 - **Prompt:** "Faça as tarefas do Matheus em `C3_Instrucoes_da_Equipe.md`, na branch `secaoMatheus`, com um commit por alteração e atualizando o `Matheus.md`."
 - **Uso da IA:** criação da rota `GET /saude` devolvendo `{"status": "ok"}`, declarada antes de montar o `frontend/` para não ser escondida por ele.
 - **Minhas decisões:** a rota é `GET`, então não conta no limite por IP (que só vale para `POST`) — o Render pode checá-la à vontade sem gastar a cota de ninguém.
+
+## Versões fixas (`requirements.txt`)
+
+- **Prompt:** mesmo pedido acima (tarefa "fixar as versões no `requirements.txt`").
+- **Uso da IA:** troca dos nomes soltos por versões exatas (`==`), conferindo no PyPI que todas existem.
+- **Minhas decisões:** usar as versões da lista das instruções (as que funcionam hoje), para o Render instalar sempre o mesmo ambiente testado e uma versão nova de biblioteca não quebrar o deploy sem aviso.
