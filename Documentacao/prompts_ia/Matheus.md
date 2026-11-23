@@ -56,3 +56,9 @@ Mesma ferramenta da C2: **Claude Code** (Anthropic, modelo Claude Opus 5.5). Par
 - **Prompt:** mesmo pedido acima (tarefa "fixar as versões no `requirements.txt`").
 - **Uso da IA:** troca dos nomes soltos por versões exatas (`==`), conferindo no PyPI que todas existem.
 - **Minhas decisões:** usar as versões da lista das instruções (as que funcionam hoje), para o Render instalar sempre o mesmo ambiente testado e uma versão nova de biblioteca não quebrar o deploy sem aviso.
+
+## Configuração do Render (`render.yaml`)
+
+- **Prompt:** mesmo pedido acima (tarefa "registrar o serviço num `render.yaml` na raiz, sem a chave").
+- **Uso da IA:** escrita do `render.yaml` (Web Service Python, plano grátis, branch `main`, build e start das instruções, `healthCheckPath: /saude`, `PYTHON_VERSION=3.12.10`).
+- **Minhas decisões:** a `GROQ_API_KEY` entra com `sync: false`, ou seja, o Render pede o valor no painel e ela nunca vai para o repositório. O start usa `--proxy-headers --forwarded-allow-ips="*"`; conferi localmente com `LIMITE_POR_MINUTO=1` e o cabeçalho `X-Forwarded-For`: o mesmo IP recebe 429 na 2ª chamada, mas outro IP continua recebendo 200 — sem a flag, todos dividiriam o limite do IP do proxy.
