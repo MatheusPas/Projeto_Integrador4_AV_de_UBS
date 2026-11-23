@@ -2,6 +2,9 @@
 
 Rodar: uvicorn backend.app.main:app --reload  ->  http://localhost:8000
 
+No deploy (Render), o start usa --proxy-headers para request.client.host
+ser o IP real do usuário, e não o do proxy (ver render.yaml).
+
 O servidor não guarda nada: a receita lida volta para o frontend, que a
 reenvia a cada mensagem do chat.
 """
@@ -58,6 +61,12 @@ class Receita(BaseModel):
 class Pergunta(BaseModel):
     pergunta: str = Field(min_length=1, max_length=1000)
     receita: Receita | None = None
+
+
+@app.get("/saude")
+def saude() -> dict:
+    """Usada pelo Render para checar se o serviço está no ar."""
+    return {"status": "ok"}
 
 
 @app.post("/chat")

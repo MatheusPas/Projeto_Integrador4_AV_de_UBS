@@ -1,0 +1,19 @@
+# Deploy no Render (plano grátis). Passo a passo em Documentacao/deploy.md.
+# A GROQ_API_KEY NÃO fica aqui: é preenchida só no painel do Render.
+services:
+  - type: web
+    name: assistente-ubs-vitoria
+    runtime: python
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    # --proxy-headers: request.client.host passa a ser o IP real do usuário,
+    # senão todos dividem o mesmo limite de 20/min (o IP do proxy do Render)
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /saude
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: GROQ_API_KEY
+        sync: false  # o Render pede o valor no painel; nunca vai para o repositório
